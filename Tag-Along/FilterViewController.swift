@@ -45,11 +45,11 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
     @IBOutlet var view_pictures: UIView!
     @IBOutlet var view_time: UIView!
     @IBOutlet weak var view_base: UIView!
-       @IBOutlet weak var table_view: UITableView!
-    var statePrice = 0
-    var statePicture = 0
-    var stateCarComfort = 0
-    var stateRating = 0
+    @IBOutlet weak var table_view: UITableView!
+    var statePrice = ""
+    var statePicture = ""
+    var stateCarComfort = ""
+    var stateRating = ""
     
      var buttonsPrice = [UIButton]()
     var buttonsPicture = [UIButton]()
@@ -60,6 +60,12 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
     var array1 = [String]()
     var array2 = [String]()
     var myprotocol: MyProtocol?
+    var buttonPriceArray = ["All Price", "High Price", "Medium Price", "Low Price"]
+    var buttonPictureArray = ["All", "With Picture Only"]
+    var buttonRidetypeArray = ["Ladies Only", "Shopping Rides"]
+    var buttonCarComfortArray = ["All Types", "Basic", "Comfortable", "Luxury"]
+    var buttonRatingArray = ["One", "Two", "Three", "Four", "Five"]
+    
     
     // MARK:- VIEW CONTROLLER LIFE CYCLE
     override func viewDidLoad() {
@@ -114,7 +120,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
        
         
         buttonsrating = [btn_rating_one, btn_rating_two, btn_rating_three, btn_rating_four, btn_rating_five]
-        buttonsrating[stateRating].isSelected = true
+        buttonsrating[0].isSelected = true
 
     }
     func tappedRating(_ button: UIButton){
@@ -122,7 +128,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
             if buttonClicked == button{
                 buttonClicked.isSelected = true
                 print(index)
-                stateRating = index
+                stateRating = buttonRatingArray[index]
                         
             }
             else{
@@ -143,7 +149,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
         btn_luxury_car.addTarget(self, action: #selector(FilterViewController.tappedCar(_:)), for: .touchUpInside)
         
         buttonsCarcomfort = [btn_all_car, btn_basic_car, btn_comfort_car, btn_luxury_car]
-        buttonsCarcomfort[stateCarComfort].isSelected = true
+        buttonsCarcomfort[0].isSelected = true
 
     }
     func tappedCar(_ button: UIButton){
@@ -151,7 +157,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
             if buttonClicked == button{
                 buttonClicked.isSelected = true
                 print(index)
-                stateCarComfort = index
+                stateCarComfort = buttonCarComfortArray[index]
                 
             }
             else{
@@ -169,7 +175,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
         btn_with_picture_only.addTarget(self, action: #selector(FilterViewController.tappedPicture(_:)), for: .touchUpInside)
       
         buttonsPicture = [btn_all_picture, btn_with_picture_only]
-        buttonsPicture[statePicture].isSelected = true
+        buttonsPicture[0].isSelected = true
     }
     func buttonPrice(){
         btn_all_price.addTarget(self, action: #selector(FilterViewController.tappedPrice(_:)), for: .touchUpInside)
@@ -178,7 +184,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
         btn_average_price.addTarget(self, action: #selector(FilterViewController.tappedPrice(_:)), for: .touchUpInside)
         btn_low_price.addTarget(self, action: #selector(FilterViewController.tappedPrice(_:)), for: .touchUpInside)
         buttonsPrice = [btn_all_price, btn_high_price, btn_average_price, btn_low_price]
-        buttonsPrice[statePrice].isSelected = true
+        buttonsPrice[0].isSelected = true
     }
    
     
@@ -197,7 +203,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
             if buttonClicked == button{
                 buttonClicked.isSelected = true
                 print(index)
-                statePicture = index
+                statePicture = buttonPictureArray[index]
                 
             }
             else{
@@ -215,8 +221,8 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
          for (index, buttonClicked) in buttonsPrice.enumerated(){
               if buttonClicked == button{
                   buttonClicked.isSelected = true
-                  print(index)
-                  statePrice = index
+                  print(buttonPriceArray[index])
+                  statePrice = buttonPriceArray[index]
                 
               }
                 else{

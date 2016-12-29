@@ -14,6 +14,7 @@ class FindARideViewController: UIViewController, UITextFieldDelegate{
     weak var delegate: SegueHandler?
     var flag = false
     var number: Int!
+    var searchDate: String!
     var fromAddress: String!
     var fromNewAddress: String!
     var toAddress: String!
@@ -61,10 +62,11 @@ class FindARideViewController: UIViewController, UITextFieldDelegate{
             print(searchURL)
             print(fromNewAddress!)
             print(toNewAddress!)
-            print(toLatLng!)
+            
             print(fromLatLng!)
+            print(toLatLng!)
             DispatchQueue.main.async {
-                self.callAlamo(url: self.searchURL, searchDate: "2016-12-31", from: self.fromNewAddress!, to: self.toNewAddress!, fromLatLong: self.fromLatLng!, toLatLong: self.toLatLng!)
+                self.callAlamo(url: self.searchURL, searchDate: self.searchDate!, from: "(" + self.fromLatLng! + ")", to: "(" + self.toLatLng! + ")", fromLatLong: self.fromLatLng!, toLatLong: self.toLatLng!)
                 self.startSpinner()
             }
             
@@ -151,7 +153,9 @@ class FindARideViewController: UIViewController, UITextFieldDelegate{
     func callAlamo(url: String, searchDate: String, from: String, to: String, fromLatLong: String, toLatLong: String)
     {
         view.isUserInteractionEnabled = false
-        let params: Parameters = ["type": "find_ride", "searchdate": searchDate, "From": from, "To": to]
+        //let params: Parameters = ["type": "find_ride", "searchdate": searchDate, "From": from, "To": to]
+        let params: Parameters = ["type": "find_ride", "searchdate": searchDate, "From_lat_long": from, "To_lat_long": to]
+
         Alamofire.request(url, method: .post, parameters: params).responseJSON(completionHandler: {
             response in
             print("response is: \(response)")
@@ -167,7 +171,12 @@ class FindARideViewController: UIViewController, UITextFieldDelegate{
         view.isUserInteractionEnabled = true
         stopSpinner()
         if let mainarray = json["mainarr"].arrayObject{
+//            if mainarray == "No result found"
+//            {
+//            
+//            }
             
+//            else {
             if mainarray.count > 0{
                 var name = String()
                 for i in 0..<mainarray.count{
@@ -222,10 +231,17 @@ class FindARideViewController: UIViewController, UITextFieldDelegate{
                
 
             }
-            else{ print("Error no value")
-                delegate?.segueToNext(identifier: "cantfindride", defaultValue: 4)
+           
+        }
+        else if let mainarray = json["mainarr"].string
+        {
+            if mainarray == "No result found"
+            {
+             print("Error no value")
+             delegate?.segueToNext(identifier: "cantfindride", defaultValue: 4)
             }
         }
+        
         
         
     }
@@ -323,7 +339,9 @@ class FindARideViewController: UIViewController, UITextFieldDelegate{
     func datePickerChanged(sender: UIDatePicker)
     {
         let formatter = DateFormatter()
-          formatter.dateStyle = .full
+        formatter.dateFormat = "dd MMM YYYY"
+         // formatter.dateStyle = .long
+        searchDate = formatter.string(from: sender.date)
         txt_field_date.text = formatter.string(from: sender.date)
         view.endEditing(true)
 
