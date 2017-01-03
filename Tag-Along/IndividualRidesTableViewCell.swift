@@ -8,6 +8,7 @@
 
 import UIKit
 import AwesomeButton
+import STRatingControl
 class IndividualRidesTableViewCell: UITableViewCell {
 
     @IBOutlet weak var lbl_time: UILabel!
@@ -17,6 +18,8 @@ class IndividualRidesTableViewCell: UITableViewCell {
     @IBOutlet weak var btn_price: AwesomeButton!
     @IBOutlet weak var lbl_driver_name: UILabel!
     @IBOutlet weak var img_view_driver: UIImageView!
+    @IBOutlet weak var ratingStar: STRatingControl!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

@@ -14,6 +14,7 @@ pod 'SDWebImage'
  pod 'MBProgressHUD', '~> 1.0.0'
  pod 'Alamofire', '~> 4.0'
  pod 'SwiftyJSON', :git => 'https://github.com/SwiftyJSON/SwiftyJSON.git'
+ pod 'GooglePlaces'
 
     
  

@@ -133,11 +133,13 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
             clearShared()
             let loginManager = FBSDKLoginManager()
             loginManager.logOut()
-           performSegue(withIdentifier: "logout1", sender: self)
+           performSegue(withIdentifier: "logout", sender: self)
+//            let viewControllers: [UIViewController] = self.navigationController!.viewControllers ;
+//            for aViewController in viewControllers {
+//                if(aViewController is LoginViewController){
+//                    self.navigationController!.popToViewController(aViewController, animated: true);
+//                }
+//            }
         }
     }
-   
-    
-
-
 }

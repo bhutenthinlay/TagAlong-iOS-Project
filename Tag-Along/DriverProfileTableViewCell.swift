@@ -7,15 +7,18 @@
 //
 
 import UIKit
-
+import STRatingControl
 class DriverProfileTableViewCell: UITableViewCell {
-
+    var ratingValue: Int!
+    @IBOutlet weak var rating: STRatingControl!
     @IBOutlet weak var img_view_profile: UIImageView!
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+                 // rating.rating = ratingValue
         // Initialization code
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 

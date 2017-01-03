@@ -3,6 +3,9 @@ PODS:
   - AwesomeButton (0.2.0)
   - Cosmos (6.0.1)
   - DLRadioButton (1.4.9)
+  - GoogleMaps/Base (2.0.1)
+  - GooglePlaces (2.0.1):
+    - GoogleMaps/Base (= 2.0.1)
   - GooglePlacesSearchController (0.1.6)
   - MBProgressHUD (1.0.0)
   - SDWebImage (3.8.2):
@@ -17,6 +20,7 @@ DEPENDENCIES:
   - AwesomeButton
   - Cosmos
   - DLRadioButton (~> 1.4)
+  - GooglePlaces
   - GooglePlacesSearchController
   - MBProgressHUD (~> 1.0.0)
   - SDWebImage
@@ -38,6 +42,8 @@ SPEC CHECKSUMS:
   AwesomeButton: 59eef1ff4875b4887e68f803c5dc664c27b63fa5
   Cosmos: 374de9804e382a23662908688ab15c8f473977fe
   DLRadioButton: 7bb8a6e3768b572469ace553391ab4d2af6f9c19
+  GoogleMaps: f09da64fc987c1aa29394567c3cab5a3df83c402
+  GooglePlaces: 72fab1d1651c6df0322f2aad245ffb15b80d3c56
   GooglePlacesSearchController: a74fa0545896fee45426b8a9c62939785e6b0634
   MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
@@ -45,6 +51,6 @@ SPEC CHECKSUMS:
   STRatingControl: 2170e44ad8efac32f68a6ab9562f09ff9180cc76
   SwiftyJSON: b37a26c0a27587f13e8f223e0280e69c3be5d1d4
 
-PODFILE CHECKSUM: 0ede1e89fc4ae31f339c853d3560a412d055f017
+PODFILE CHECKSUM: 38691b0de7e102235132489b4d77e223dfc29fa5
 
 COCOAPODS: 1.2.0.beta.1

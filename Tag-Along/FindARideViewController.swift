@@ -10,7 +10,7 @@ import UIKit
 import AwesomeButton
 import Alamofire
 import SwiftyJSON
-class FindARideViewController: UIViewController, UITextFieldDelegate{
+class FindARideViewController: UIViewController, UITextFieldDelegate, LocationDetailProtocol{
     weak var delegate: SegueHandler?
     var flag = false
     var number: Int!
@@ -38,13 +38,39 @@ class FindARideViewController: UIViewController, UITextFieldDelegate{
     @IBOutlet weak var btn_to: UIButton!
     @IBOutlet weak var btn_from: UIButton!
     @IBOutlet weak var txt_field_date: UITextField!
+    var ridesDetail = RidesDetails()
+    var defaultValues: Int!
+    
     
     @IBAction func btn_to(_ sender: UIButton) {
-        delegate?.segueToNext(identifier: "autocomplete", defaultValue: 1)
+        print("it is being pressed")
+        self.defaultValues = 1
+      performSegue(withIdentifier: "autocomplete", sender: self)
     }
-    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "autocomplete"{
+           let dvc = segue.destination as! AutoCompleteNewViewController
+            dvc.defaultValues = defaultValues
+            dvc.protocolLocation = self
+        }
+        else if segue.identifier == "cantfindride"
+        {
+            let dvc = segue.destination as! CantFindRideViewController
+           
+           
+        }
+        else if segue.identifier == "rideavailable"
+        {
+           let dvc = segue.destination as! RidesAvailableViewController
+            dvc.ridesDetail = ridesDetail
+        }
+       
+        
+    }
     @IBAction func btn_from(_ sender: UIButton) {
-        delegate?.segueToNext(identifier: "autocomplete", defaultValue: 2)
+       // delegate?.segueToNext(identifier: "autocomplete", defaultValue: 2)
+        self.defaultValues = 2
+        performSegue(withIdentifier: "autocomplete", sender: self)
     }
    
        @IBAction func btn_search(_ sender: AwesomeButton) {
@@ -65,6 +91,9 @@ class FindARideViewController: UIViewController, UITextFieldDelegate{
             
             print(fromLatLng!)
             print(toLatLng!)
+            ridesDetail.driverFromLatLng = self.fromLatLng
+            ridesDetail.driverToLatLng = self.toLatLng
+            
             DispatchQueue.main.async {
                 self.callAlamo(url: self.searchURL, searchDate: self.searchDate!, from: "(" + self.fromLatLng! + ")", to: "(" + self.toLatLng! + ")", fromLatLong: self.fromLatLng!, toLatLong: self.toLatLng!)
                 self.startSpinner()
@@ -75,23 +104,18 @@ class FindARideViewController: UIViewController, UITextFieldDelegate{
             
         }
         else{
+            
+            performSegue(withIdentifier: "cantfindride", sender: self)
             delegate?.segueToNext(identifier: "cantfindride", defaultValue: 4)
         }
         }
         
     }
-   //    func textFieldDidBeginEditing(_ textField: UITextField) {
-//        if textField == txt_field_from{
-//            delegate?.segueToNext(identifier: "autocomplete")
-//        }
-//        else{
-//            delegate?.segueToNext(identifier: "autocomplete")
-//        }
-//    }
     
     //MARK: - VIEW CONTROLLER LIFE CYCLE
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         txt_field_date.attributedPlaceholder = NSAttributedString(string: "Select a Date", attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
         print("num: \(number)")
         print("find a ride : \(fromAddress)")
@@ -124,7 +148,7 @@ class FindARideViewController: UIViewController, UITextFieldDelegate{
         getDataFromNotification(name: "notifyToLatitude", value: 7)
         getDataFromNotification(name: "notifyToLongitude", value: 8)
         
-        
+        clearAllData()
     
 
 
@@ -154,7 +178,7 @@ class FindARideViewController: UIViewController, UITextFieldDelegate{
     {
         view.isUserInteractionEnabled = false
         //let params: Parameters = ["type": "find_ride", "searchdate": searchDate, "From": from, "To": to]
-        let params: Parameters = ["type": "find_ride", "searchdate": searchDate, "From_lat_long": from, "To_lat_long": to]
+        let params: Parameters = ["type": "find_ride", "searchdate": searchDate, "From_lat_long": from, "To_lat_long": to, "search": "place"]
 
         Alamofire.request(url, method: .post, parameters: params).responseJSON(completionHandler: {
             response in
@@ -178,47 +202,85 @@ class FindARideViewController: UIViewController, UITextFieldDelegate{
             
 //            else {
             if mainarray.count > 0{
+                
                 var name = String()
                 for i in 0..<mainarray.count{
                 if let firstName = json["mainarr"][i]["FirstName"].string {
                     print("userName is : \(firstName)")
                     name = firstName
+                    
                     //driverName.append(userName)
                  }
                 if let lastName = json["mainarr"][i]["LastName"].string {
                         print("userName is : \(lastName)")
                         name = name + " " + lastName
                         driverName.append(name)
+                        ridesDetail.driverName.append(name)
+                        print("driver name from model \(ridesDetail.driverName[i])")
                        print(driverName)
                     }
                     if let from = json["mainarr"][i]["from"].string {
                         driverFrom.append(from)
+                        ridesDetail.driverDepartureFrom.append(from)
                         print(driverFrom)
+                        
                     }
                     if let to = json["mainarr"][i]["to"].string {
                         driverTo.append(to)
                         print(driverTo)
+                        ridesDetail.driverDestinationTo.append(to)
                     }
                     if let image = json["mainarr"][i]["image"].string {
                         driverImageURL.append(image)
+                        ridesDetail.driverImageURL.append(image)
                         print(driverImageURL)
                     }
                     if let price = json["mainarr"][i]["price"].string {
                         driverPrice.append(price)
+                        ridesDetail.driverPrice.append(price)
+                        
                         print(driverPrice)
                     }
                     if let rating = json["mainarr"][i]["rating"].int {
                         driverRating.append(rating)
                         print(driverRating)
+                        ridesDetail.driverRating.append(rating)
                     }
                     if let date = json["mainarr"][i]["start_date"].string {
                         driverStartDate.append(date)
+                        ridesDetail.driverDepartureDate.append(date)
                         print(driverStartDate)
                     }
                     if let time = json["mainarr"][i]["start_time"].string {
                         driverStartTime.append(time)
+                        ridesDetail.driverDepartureTime.append(time)
                         print(driverStartTime)
                     }
+                    if let schedule = json["mainarr"][i]["flexibility"].string{
+                       ridesDetail.driverSchedule.append(schedule)
+                    }
+                    if let detour = json["mainarr"][i]["detour"].string{
+                        ridesDetail.driverDetour.append(detour)
+                    }
+                    if let luggage = json["mainarr"][i]["Luggage"].string{
+                        ridesDetail.driverLuggageSize.append(luggage)
+                    }
+                    if let seat = json["mainarr"][i]["seats"].string{
+                        ridesDetail.driverSeatAvailable.append(seat)
+                    }
+                    if let carName = json["mainarr"][i]["carname"].string{
+                        ridesDetail.driverCarBrand.append(carName)
+                    }
+                    if let carComfort = json["mainarr"][i]["carcomfort"].string{
+                        ridesDetail.driverCarComfort.append(carComfort)
+                    }
+                    
+
+
+
+
+
+                  
 
 
 
@@ -226,8 +288,10 @@ class FindARideViewController: UIViewController, UITextFieldDelegate{
                     
                     
                 }
-                delegate?.segueToNext(identifier: "ridesavailable", defaultValue: 3, driverName: driverName, driverFrom: driverFrom, driverTo: driverTo, driverImageURL: driverImageURL, driverPrice: driverPrice, driverRating: driverRating, driverStartDate: driverStartDate, driverStartTime: driverStartTime)
-                clearAllData()
+              //  delegate?.segueToNext(identifier: "ridesavailable", defaultValue: 3, driverName: driverName, driverFrom: driverFrom, driverTo: driverTo, driverImageURL: driverImageURL, driverPrice: driverPrice, driverRating: driverRating, driverStartDate: driverStartDate, driverStartTime: driverStartTime)
+              //delegate?.segueToNext(identifier: "ridesavailable", defaultValue: 3, ridesDetail: ridesDetail)
+                performSegue(withIdentifier: "rideavailable", sender: self)
+                
                
 
             }
@@ -238,7 +302,8 @@ class FindARideViewController: UIViewController, UITextFieldDelegate{
             if mainarray == "No result found"
             {
              print("Error no value")
-             delegate?.segueToNext(identifier: "cantfindride", defaultValue: 4)
+            // delegate?.segueToNext(identifier: "cantfindride", defaultValue: 4)
+                performSegue(withIdentifier: "cantfindride", sender: self)
             }
         }
         
@@ -248,14 +313,16 @@ class FindARideViewController: UIViewController, UITextFieldDelegate{
     //MARK: -CLEAR ALL DATA
     func clearAllData()
     {
-        driverName.removeAll()
-        driverFrom.removeAll()
-        driverTo.removeAll()
-        driverImageURL.removeAll()
-        driverPrice.removeAll()
-        driverRating.removeAll()
-        driverStartTime.removeAll()
-        driverStartDate.removeAll()
+        ridesDetail.driverName.removeAll()
+       ridesDetail.driverDepartureFrom.removeAll()
+      ridesDetail.driverDestinationTo.removeAll()
+       ridesDetail.driverImageURL.removeAll()
+        
+        ridesDetail.driverPrice.removeAll()
+        ridesDetail.driverRating.removeAll()
+       ridesDetail.driverDepartureTime.removeAll()
+        ridesDetail.driverDepartureDate.removeAll()
+        
     }
 
 //MARK: - GET DATA FROM NOTIFICATION
@@ -339,11 +406,16 @@ class FindARideViewController: UIViewController, UITextFieldDelegate{
     func datePickerChanged(sender: UIDatePicker)
     {
         let formatter = DateFormatter()
+        let fromatter1 = DateFormatter()
         formatter.dateFormat = "dd MMM YYYY"
+        fromatter1.dateFormat = "MM/dd/YYYY"
+        
          // formatter.dateStyle = .long
         searchDate = formatter.string(from: sender.date)
-        txt_field_date.text = formatter.string(from: sender.date)
-        view.endEditing(true)
+        ridesDetail.driverDate = searchDate
+        
+        txt_field_date.text = fromatter1.string(from: sender.date)
+//        view.endEditing(true)
 
         
     }
@@ -360,6 +432,12 @@ class FindARideViewController: UIViewController, UITextFieldDelegate{
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)
     }
-
+    func sendAddress(address: String)
+    {
+        print("got the address in home: \(address)")
+        fromAddress = address
+        
+        
+    }
     
 }

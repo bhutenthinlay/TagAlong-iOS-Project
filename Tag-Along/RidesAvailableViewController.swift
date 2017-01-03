@@ -7,20 +7,17 @@
 //
 
 import UIKit
-
+import STRatingControl
 
 class RidesAvailableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, MyProtocol {
-    
-    var name = [String]()
-    var departureFrom = [String]()
-    var destination = [String]()
-    var date = [String]()
-    var time = [String]()
-    var price = [String]()
-    var imageURL = [String]()
-    var starRating = [Int]()
+  
+    var ridesDetail = RidesDetails()
     // MARK: - outlets
-    
+    @IBAction func bar_btn_filter(_ sender: UIBarButtonItem) {
+        performSegue(withIdentifier: "filter", sender: self)
+        
+    }
+
     @IBOutlet weak var table_view: UITableView!
 
     @IBAction func bar_btn_back(_ sender: UIBarButtonItem) {
@@ -48,8 +45,8 @@ class RidesAvailableViewController: UIViewController, UITableViewDelegate, UITab
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         print("view did viewDidAppear")
-        if name.count > 0{
-            print(name)
+        if ridesDetail.driverName.count > 0{
+            print(ridesDetail.driverName[0])
             table_view.reloadData()
         }
         
@@ -71,19 +68,29 @@ class RidesAvailableViewController: UIViewController, UITableViewDelegate, UITab
 
     // MARK: - tableview functions
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return price.count
+        return ridesDetail.driverName.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell") as! IndividualRidesTableViewCell
-        cell.img_view_driver.sd_setImage(with: URL(string:imageURL[indexPath.row]), placeholderImage: UIImage(named: "loading-icon-1"), options: [.continueInBackground, .progressiveDownload])
-        cell.lbl_destination.text = destination[indexPath.row]
+      
+        cell.img_view_driver.sd_setImage(with: URL(string: ridesDetail.driverImageURL[indexPath.row]), placeholderImage: UIImage(named: "loading-icon-1"), options: [.continueInBackground, .progressiveDownload])
+       
+        cell.lbl_destination.text = ridesDetail.driverDestinationTo[indexPath.row]
         
-        cell.lbl_departure_from.text = departureFrom[indexPath.row]
-        cell.lbl_date.text = date[indexPath.row]
-        cell.lbl_time.text = time[indexPath.row]
-        cell.btn_price.setTitle(price[indexPath.row], for: .normal)
-        cell.lbl_driver_name.text = name[indexPath.row]
         
+        cell.lbl_departure_from.text = ridesDetail.driverDepartureFrom[indexPath.row]
+        
+               cell.lbl_date.text = ridesDetail.driverDepartureDate[indexPath.row]
+        
+        
+        cell.lbl_time.text = ridesDetail.driverDepartureTime[indexPath.row]
+        
+       
+        cell.btn_price.setTitle(ridesDetail.driverPrice[indexPath.row], for: .normal)
+      
+        cell.lbl_driver_name.text = ridesDetail.driverName[indexPath.row]
+        
+        cell.ratingStar.rating = ridesDetail.driverRating[indexPath.row]
         
         return cell
     }
@@ -101,21 +108,37 @@ class RidesAvailableViewController: UIViewController, UITableViewDelegate, UITab
             
             
             if tag != nil{
-            dvc.imageURL = imageURL[tag]
+            dvc.imageURL = ridesDetail.driverImageURL[tag]
+                dvc.tag = tag
+                dvc.rideDetail = ridesDetail
             }
             else{
              dvc.imageURL = "http://www.american.edu/uploads/profiles/large/chris_palmer_profile_11.jpg"
+             
             }
         }
         else if segue.identifier == "filter"{
          let dvc = segue.destination as! FilterViewController
            dvc.myprotocol = self
+            dvc.ridesDetail = ridesDetail
+            
         }
     }
     func reloadTableViewData(array: [String]){
-        if !(name == array){
-           name = array
+        if !(ridesDetail.driverName == array){
+           ridesDetail.driverName = array
         }
+        
+    }
+    func reloadTableViewData(ridesDetail: RidesDetails)
+    {
+      self.ridesDetail = ridesDetail
     }
 }
-
+extension DriverProfileTableViewCell: STRatingControlDelegate {
+    
+    func didSelectRating(control: STRatingControl, rating: Int) {
+        print("Did select rating: \(rating)")
+    }
+    
+}

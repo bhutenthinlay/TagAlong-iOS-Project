@@ -21,18 +21,16 @@ class LoginViewController: UIViewController, UITextFieldDelegate, FBSDKLoginButt
 
   
     @IBOutlet weak var btn_facebook_login: FBSDKLoginButton!
-//    let loginFacebookButton: FBSDKLoginButton = {
-//      let button = FBSDKLoginButton()
-//        button.readPermissions = ["email"]
-//        return button
-//    }()
-       @IBOutlet weak var activity_indicator: UIActivityIndicatorView!
-    typealias  JSONstandard = [String: AnyObject]
-    @IBOutlet weak var txt_field_email: UITextField!
-    @IBOutlet weak var scroll: UIScrollView!
+   
 
+    typealias  JSONstandard = [String: AnyObject]
+    
+    @IBOutlet weak var txt_field_email: UITextField!
+    
+    @IBOutlet weak var scroll: UIScrollView!
     @IBOutlet weak var txt_field_password: UITextField!
-    var email: String!
+
+       var email: String!
     var password: String!
     //MARK: - READ FROM SHARED
     func readFromShared(){
@@ -60,40 +58,55 @@ class LoginViewController: UIViewController, UITextFieldDelegate, FBSDKLoginButt
         txt_field_password.delegate = self
         txt_field_email.attributedPlaceholder = NSAttributedString(string: "E-mail", attributes: [NSForegroundColorAttributeName: UIColor.white])
         txt_field_password.attributedPlaceholder = NSAttributedString(string: "Password", attributes: [NSForegroundColorAttributeName: UIColor.white])
-       
-      // btn_facebook_login = loginFacebookButton
-        
         btn_facebook_login.readPermissions = ["public_profile", "email", "user_friends"]
         btn_facebook_login.delegate = self
-        
-        
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
-        
         customizeNavigationbar()
-        // Do any additional setup after loading the view.
-         self.navigationController?.isNavigationBarHidden = true
-        scroll.contentSize.height = 670
-        let width1 = self.view.frame.size.width
-        scroll.contentSize.width = width1
+     
         
+        // Do any additional setup after loading the view.
+        self.navigationController?.isNavigationBarHidden = true
+       // scroll.contentSize.height = 670
+       // let width1 = self.view.frame.size.width
+        //scroll.contentSize.width = width1
+//        NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+       
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.isNavigationBarHidden = true
         //readFromShared()
         customizeNavigationbar()
-        scroll.contentSize.height = 670
-        let width1 = self.view.frame.size.width
-        scroll.contentSize.width = width1
+//        scroll.contentSize.height = 670
+//        let width1 = self.view.frame.size.width
+//        scroll.contentSize.width = width1
+    }
+    func keyboardWillShow(notification: NSNotification) {
+        
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y == 0{
+                self.view.frame.origin.y -= keyboardSize.height
+            }
+        }
+        
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y != 0{
+                self.view.frame.origin.y += keyboardSize.height
+            }
+        }
     }
 
     //MARK: - BUTTON LOGIN
     @IBAction func btn_login(_ sender: AwesomeButton) {
         email = txt_field_email.text!
         password = txt_field_password.text!
-                   if email == "" && password == ""
-          {
+        if email == "" && password == ""
+        {
            alert(alert: "Alert", message: "Email or Password field cannot be nil")
         }
         else if !isValidEmail(testStr: email)
@@ -101,42 +114,30 @@ class LoginViewController: UIViewController, UITextFieldDelegate, FBSDKLoginButt
           alert(alert: "Alert", message: "Please enter a valid email format")
         }
         else if password.characters.count < 8
-          {
+        {
           alert(alert: "Alert", message: "Password should have minimum of 8 characters")
-          }
-          else {
+        }
+        else {
             DispatchQueue.main.async {
                 self.callAlamo(url: self.loginURL, email: self.email, password: self.password)
                 self.startSpinner()
                 self.writeShared(key: "state", value: "1")
-                
-                
-            }
-            
+                }
         }
-        
     }
     //MARK: - STOP SPINNER
     func stopSpinner(){
-        MBProgressHUD.hideAllHUDs(for: self.view, animated: true);
+      //  MBProgressHUD.hideAllHUDs(for: self.view, animated: true);
         view.isUserInteractionEnabled = true
-
     }
-
-
     //MARK: - START SPINNER
     func startSpinner()
     {
-        let spinnerActivity = MBProgressHUD.showAdded(to: self.view, animated: true);
-        
-        spinnerActivity.label.text = "Loading";
-        
-        spinnerActivity.detailsLabel.text = "Please Wait!!";
-        
-        spinnerActivity.isUserInteractionEnabled = false;
-        
+        let spinnerActivity = MBProgressHUD.showAdded(to: self.view, animated: true)
+        spinnerActivity.label.text = "Loading"
+        spinnerActivity.detailsLabel.text = "Please Wait!!"
+        spinnerActivity.isUserInteractionEnabled = false
         view.isUserInteractionEnabled = false
-
     }
     //MARK: -  WRITE ON SHARED PREFERENCE
     func writeShared(key: String, value: String)
@@ -264,7 +265,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate, FBSDKLoginButt
         transition.type = kCATransitionPush
         transition.subtype = kCATransitionFromRight
         view.window!.layer.add(transition, forKey: kCATransition)
-        
         self.present(controller, animated: false, completion: nil)
 
     }
@@ -280,20 +280,38 @@ class LoginViewController: UIViewController, UITextFieldDelegate, FBSDKLoginButt
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
 
     }
-
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        animateViewMoving(up: true, moveValue: 100)
+    }
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        animateViewMoving(up: false, moveValue: 100)
+    }
   
-       func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField == txt_field_email{
             txt_field_email.resignFirstResponder()
          return true
         }
-        else {
+        else if textField == txt_field_password {
             txt_field_password.resignFirstResponder()
          return true
         }
+        else{
+          return true
+        }
+    
+    }
+    func animateViewMoving (up:Bool, moveValue :CGFloat){
+        let movementDuration:TimeInterval = 0.3
+        let movement:CGFloat = ( up ? -moveValue : moveValue)
+        UIView.beginAnimations( "animateView", context: nil)
+        UIView.setAnimationBeginsFromCurrentState(true)
+        UIView.setAnimationDuration(movementDuration )
+        self.view.frame = self.view.frame.offsetBy(dx: 0,  dy: movement)
+        UIView.commitAnimations()
     }
     //MARK: - DISMISS KEYBOARD
-    func dismissKeyboard() {
+   func dismissKeyboard() {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)
     }

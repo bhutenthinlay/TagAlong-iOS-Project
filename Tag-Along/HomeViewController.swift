@@ -10,21 +10,14 @@ import UIKit
 import Segmentio
 
 class HomeViewController: UIViewController, SegueHandler, LocationDetailProtocol{
-    var driverName = [String]()
-    var driverPrice = [String]()
-    var driverFrom = [String]()
-    var driverTo = [String]()
-    var driverImageURL = [String]()
-    var driverRating = [Int]()
-    var driverStartDate = [String]()
-    var driverStartTime = [String]()
-    let loginDetail = LoginDetails()
+   
     var defaultNewValue: Int!
     var segmentioStyle = SegmentioStyle.OnlyLabel
     var content = [SegmentioItem]()
     let findARide = SegmentioItem(title: "FIND A RIDE", image: UIImage(named: "fb"))
     let offerARide = SegmentioItem(title: "OFFER A RIDE", image: UIImage(named: "fb"))
     var fromAddress: String!
+    var rideDetail = RidesDetails()
     // MARK: - Outlets
     @IBOutlet weak var bar_btn_menu: UIBarButtonItem!
   
@@ -49,8 +42,7 @@ class HomeViewController: UIViewController, SegueHandler, LocationDetailProtocol
     // MARK: - View life cycle methods
        override func viewDidLoad() {
         super.viewDidLoad()
-        print("email from model at home is: \(loginDetail.email)")
-      
+            
         bar_btn_menu.target = self.revealViewController()
         bar_btn_menu.action = #selector(SWRevealViewController.revealToggle(_:))
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
@@ -68,22 +60,49 @@ class HomeViewController: UIViewController, SegueHandler, LocationDetailProtocol
             switch (segmentIndex){
             case 0:
                 print("Selected one")
-                self.containerview_findaride.isHidden = false
-                self.containerview_offeraride.isHidden = true
+                NotificationCenter.default.post(name: Notification.Name("segment0"), object: 0)
                 break
             case 1:
                 print("1")
-                self.containerview_findaride.isHidden = true
-                self.containerview_offeraride.isHidden = false
+                NotificationCenter.default.post(name: Notification.Name("segment1"), object: 1)
                 
                 break
             default: break
             }
-            
+        
         }
+        
+        NotificationCenter.default.addObserver(forName: Notification.Name("currentindexafter"), object: nil, queue: nil){ notfication in
+            print("notification is: \(notfication.object as! Int)")
+            self.view_segmentio.selectedSegmentioIndex = notfication.object as! Int
+        }
+        NotificationCenter.default.addObserver(forName: Notification.Name("currentindexbefore"), object: nil, queue: nil){ notfication in
+            print("notification is: \(notfication.object as! Int)")
+            self.view_segmentio.selectedSegmentioIndex = notfication.object as! Int
+        }
+//        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(self.respondToSwipeGesture))
+//        swipeRight.direction = UISwipeGestureRecognizerDirection.right
+//        self.view.addGestureRecognizer(swipeRight)
       
         
     }
+//    func respondToSwipeGesture(gesture: UIGestureRecognizer) {
+//        if let swipeGesture = gesture as? UISwipeGestureRecognizer {
+//            switch swipeGesture.direction {
+//            case UISwipeGestureRecognizerDirection.right:
+//                print("Swiped right")
+//            case UISwipeGestureRecognizerDirection.down:
+//                print("Swiped down")
+//            case UISwipeGestureRecognizerDirection.left:
+//                print("Swiped left")
+//            case UISwipeGestureRecognizerDirection.up:
+//                print("Swiped up")
+//            default:
+//                break
+//            }
+//        }
+//    }
+    
     func segueToNext(identifier: String, defaultValue: Int) {
         self.defaultNewValue = defaultValue
 
@@ -91,31 +110,23 @@ class HomeViewController: UIViewController, SegueHandler, LocationDetailProtocol
               print("Default value is: \(defaultNewValue)")
         
     }
-    func segueToNext(identifier: String, defaultValue: Int, driverName: [String], driverFrom: [String], driverTo: [String], driverImageURL: [String], driverPrice: [String], driverRating: [Int], driverStartDate: [String], driverStartTime: [String]) {
-        self.defaultNewValue = defaultValue
-        self.driverName = driverName
-        self.driverFrom = driverFrom
-        self.driverTo = driverTo
-        self.driverImageURL = driverImageURL
-        self.driverPrice = driverPrice
-        self.driverRating = driverRating
-        self.driverStartDate = driverStartDate
-        self.driverStartTime = driverStartTime
-        self.performSegue(withIdentifier: identifier, sender: self)
-        //clearAllData()
-        
+       func segueToNext(identifier: String, defaultValue: Int, ridesDetail: RidesDetails) {
+        self.rideDetail = ridesDetail
+       
+        performSegue(withIdentifier: identifier, sender: self)
         
     }
     func clearAllData()
     {
-      driverName.removeAll()
-        driverFrom.removeAll()
-        driverTo.removeAll()
-        driverImageURL.removeAll()
-        driverPrice.removeAll()
-        driverRating.removeAll()
-        driverStartTime.removeAll()
-        driverStartDate.removeAll()
+        rideDetail.driverName.removeAll()
+        rideDetail.driverDepartureFrom.removeAll()
+        rideDetail.driverDestinationTo.removeAll()
+        rideDetail.driverDepartureTime.removeAll()
+        rideDetail.driverDepartureDate.removeAll()
+        rideDetail.driverImageURL.removeAll()
+        rideDetail.driverRating.removeAll()
+        rideDetail.driverPrice.removeAll()
+        
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
     {
@@ -124,27 +135,14 @@ class HomeViewController: UIViewController, SegueHandler, LocationDetailProtocol
             dvc.delegate = self
             dvc.number = 1
             dvc.fromAddress = fromAddress
-            
-            
         }
         else if segue.identifier == "ridesavailable"{
           let dvc = segue.destination as! RidesAvailableViewController
-            
-            dvc.destination = driverTo
-            dvc.departureFrom = driverFrom
-            dvc.starRating = driverRating
-            dvc.name = driverName
-            dvc.time = driverStartTime
-            dvc.date = driverStartDate
-            dvc.price = driverPrice
-            dvc.imageURL = driverImageURL
-           
+            dvc.ridesDetail = rideDetail
         }
-    
         else if segue.identifier == "offeraride" {
             let dvc = segue.destination as! OfferARideViewController
             dvc.delegate = self
-            
             
         }
         else if segue.identifier == "cantfindride"{
@@ -152,12 +150,10 @@ class HomeViewController: UIViewController, SegueHandler, LocationDetailProtocol
         }
         else if segue.identifier == "autocomplete"
         {
-            
-           let dvc = segue.destination as! AutoCompleteViewController
+            let dvc = segue.destination as! AutoCompleteNewViewController
             dvc.protocolLocation = self
-           dvc.defaultValues = defaultNewValue
+            dvc.defaultValues = defaultNewValue
         }
-        
     }
    
     // MARK: - Customize Navigation Bar
@@ -190,6 +186,7 @@ class HomeViewController: UIViewController, SegueHandler, LocationDetailProtocol
         super.viewWillAppear(animated)
         print("view will appear")
         readFromShared()
+        clearAllData()
                // Do any additional setup after loading the view.
         
 
@@ -199,6 +196,6 @@ class HomeViewController: UIViewController, SegueHandler, LocationDetailProtocol
 
 protocol SegueHandler: class {
     func segueToNext(identifier: String, defaultValue: Int)
-    func segueToNext(identifier: String, defaultValue: Int, driverName: [String], driverFrom: [String], driverTo: [String], driverImageURL: [String], driverPrice: [String], driverRating: [Int], driverStartDate: [String], driverStartTime: [String])
+      func segueToNext(identifier: String, defaultValue: Int, ridesDetail: RidesDetails)
     
 }

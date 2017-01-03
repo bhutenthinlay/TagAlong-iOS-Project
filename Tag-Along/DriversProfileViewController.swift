@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import STRatingControl
 
 class DriversProfileViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     var locationTo = [String]()
@@ -56,7 +57,11 @@ class DriversProfileViewController: UIViewController, UITableViewDataSource, UIT
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
         
     }
-
+    //MARK :- RATING DELEGATE
+    func didSelectRating(_ control: STRatingControl, rating: Int) {
+        print(rating)
+    }
+     //MARK :- TABLEVIEW DELEGATES METHOD
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0{
@@ -68,7 +73,11 @@ class DriversProfileViewController: UIViewController, UITableViewDataSource, UIT
         cell.img_view_profile.layer.cornerRadius = cell.img_view_profile.frame.height/2
         
         cell.img_view_profile.clipsToBounds = true
-        return cell
+            cell.rating.delegate = self
+            cell.rating.rating = 5
+            
+           
+                   return cell
         }
         else{
           let cell = tableView.dequeueReusableCell(withIdentifier: "cell1") as! DriverRidesPostedTableViewCell
@@ -110,4 +119,11 @@ class DriversProfileViewController: UIViewController, UITableViewDataSource, UIT
     }
     */
 
+}
+extension DriversProfileViewController: STRatingControlDelegate {
+    
+    func didSelectRating(control: STRatingControl, rating: Int) {
+        print("Did select rating: \(rating)")
+    }
+    
 }

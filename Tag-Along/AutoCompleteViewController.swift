@@ -10,9 +10,6 @@ import UIKit
 import CoreLocation
 import MapKit
 import GooglePlacesSearchController
-protocol LocationDetailProtocol {
-    func sendAddress(address: String)
-}
 
 class AutoCompleteViewController: UIViewController{
     var protocolLocation: LocationDetailProtocol!

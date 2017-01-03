@@ -31,6 +31,8 @@ class ForgotPasswordViewController: UIViewController, UITextFieldDelegate {
         if let navController = self.navigationController {
             navController.popViewController(animated: true)
         }
+//        let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController];
+//        self.navigationController!.popToViewController(viewControllers[viewControllers.count - 2], animated: true);
     }
     //MARK: - CALLING WEBSERVICE ALOMO
     func callAlamo(url: String, email: String)
@@ -130,11 +132,21 @@ class ForgotPasswordViewController: UIViewController, UITextFieldDelegate {
          self.navigationController?.isNavigationBarHidden = false
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
+        customizeNavigationbar()
     }
-       override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func customizeNavigationbar()
+    {
+        //navigationController?.navigationBar.barTintColor = UIColor.clear
+        self.navigationController?.navigationBar.isTranslucent = true
+        self.navigationController?.navigationBar.barTintColor = barTintColor
+        navigationController?.navigationBar.barTintColor = barTintColor
+        self.navigationController?.navigationBar.tintColor = UIColor.white
+        //  self.navigationItem.tintColor = UIColor.white
+        
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+        
     }
+
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField == txt_field_email{

@@ -19,13 +19,20 @@ class SignUpViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     var repassword: String!
     var language: String!
     var registrationURL = "https://tag-along.net/webservice.php"
+    
+    @IBOutlet weak var btn_prefered_language: UIButton!
+    @IBAction func btn_prefered_language(_ sender: UIButton) {
+        
+        picker_language.isHidden = false
+        
+    }
     @IBAction func btn_sign_up(_ sender: AwesomeButton) {
         email = txt_field_email.text!
         name = txt_field_name.text!
         password = txt_field_password.text!
         repassword = txt_field_repassword.text!
-        language = txt_field_prefered_language.text!
-        if name == "" || email == "" || password == "" || repassword == "" || language == ""
+        
+        if name == "" || email == "" || password == "" || repassword == ""
         {
            alert(alert: "Alert", message: "Field cannot be blank")
         }
@@ -55,13 +62,16 @@ class SignUpViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     @IBOutlet weak var txt_field_password: UITextField!
     @IBOutlet weak var txt_field_email: UITextField!
     @IBOutlet weak var txt_field_name: UITextField!
-    @IBOutlet weak var txt_field_prefered_language: UITextField!
+  
+    @IBOutlet weak var txt_field_phone: UITextField!
     @IBOutlet weak var picker_language: UIPickerView!
     @IBAction func bar_btn_back(_ sender: UIBarButtonItem) {
         if let navController = self.navigationController {
             navController.popViewController(animated: true)
         }
         
+//        let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController];
+//        self.navigationController!.popToViewController(viewControllers[viewControllers.count - 2], animated: true);
 
     }
     
@@ -73,24 +83,57 @@ class SignUpViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         txt_field_name.delegate = self
         txt_field_password.delegate = self
         txt_field_repassword.delegate = self
+      
         txt_field_email.attributedPlaceholder = NSAttributedString(string: "E-mail", attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
         txt_field_name.attributedPlaceholder = NSAttributedString(string: "Name", attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
         txt_field_password.attributedPlaceholder = NSAttributedString(string: "Password", attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
         txt_field_repassword.attributedPlaceholder = NSAttributedString(string: "Re-password", attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
-     
+        txt_field_phone.attributedPlaceholder = NSAttributedString(string: "Phone number", attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
+        
         picker_language.isHidden = true
        // activity_indicator.isHidden = true
         self.navigationController?.isNavigationBarHidden = false
-        txt_field_prefered_language.delegate = self
+       
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown(notification:)), name:NSNotification.Name.UIKeyboardWillShow, object: nil);
+        
+       
+//        NotificationCenter.default.addObserver(self, selector: #selector(SignUpViewController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(SignUpViewController.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
         // Do any additional setup after loading the view.
+       // customizeNavigationbar()
     }
-    deinit {
-        NotificationCenter.default.removeObserver(self)
+    func keyboardWillShow(notification: NSNotification) {
+        
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y == 0{
+                self.view.frame.origin.y -= keyboardSize.height
+            }
+        }
+        
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y != 0{
+                self.view.frame.origin.y += keyboardSize.height
+            }
+        }
+    }
+    func customizeNavigationbar()
+    {
+        //navigationController?.navigationBar.barTintColor = UIColor.clear
+        self.navigationController?.navigationBar.isTranslucent = true
+        self.navigationController?.navigationBar.barTintColor = barTintColor
+        navigationController?.navigationBar.barTintColor = barTintColor
+        self.navigationController?.navigationBar.tintColor = UIColor.white
+        //  self.navigationItem.tintColor = UIColor.white
+        
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+        
     }
 
+   
     //MARK: - STOP SPINNER
     func stopSpinner(){
         MBProgressHUD.hideAllHUDs(for: self.view, animated: true);
@@ -204,23 +247,21 @@ class SignUpViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         return listOfLanguage.count
     }
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        self.txt_field_prefered_language.text = self.listOfLanguage[row]
         
+        
+        self.btn_prefered_language.setTitle(self.listOfLanguage[row]
+            , for: .normal)
         self.picker_language.isHidden = true
     }
     //MARK: - TEXT FIELD DELEGATE METHODS
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        if textField == self.txt_field_name{
         
-        }
-        if textField == self.txt_field_prefered_language
-        {
-          self.picker_language.isHidden = false
-            textField.endEditing(true)
-            
-        }
+               animateViewMoving(up: true, moveValue: 100)
         
+    }
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        animateViewMoving(up: false, moveValue: 100)
     }
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField == txt_field_name
@@ -240,8 +281,21 @@ class SignUpViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         else if textField == txt_field_repassword{
           txt_field_repassword.resignFirstResponder()
         }
+       
+        
         return true
     }
+    func animateViewMoving (up:Bool, moveValue :CGFloat){
+        let movementDuration:TimeInterval = 0.3
+        let movement:CGFloat = ( up ? -moveValue : moveValue)
+        UIView.beginAnimations( "animateView", context: nil)
+        UIView.setAnimationBeginsFromCurrentState(true)
+        UIView.setAnimationDuration(movementDuration )
+        self.view.frame = self.view.frame.offsetBy(dx: 0,  dy: movement)
+        UIView.commitAnimations()
+    }
+
+    
     //MARK: - DISMISS KEYBOARD
     func dismissKeyboard() {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.

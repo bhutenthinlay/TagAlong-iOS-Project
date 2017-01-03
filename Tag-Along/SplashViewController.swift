@@ -12,9 +12,10 @@ class SplashViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        readFromShared()
-        customizeNavigationbar()
-        self.navigationController?.isNavigationBarHidden = true
+        perform(#selector(SplashViewController.readFromShared), with: nil, afterDelay: 3)
+      //  readFromShared()
+       // customizeNavigationbar()
+        //self.navigationController?.isNavigationBarHidden = true
 
         // Do any additional setup after loading the view.
     }
@@ -25,7 +26,7 @@ class SplashViewController: UIViewController {
     }
     //MARK: - STOP SPINNER
     func stopSpinner(){
-        MBProgressHUD.hideAllHUDs(for: self.view, animated: true);
+    //    MBProgressHUD.hideAllHUDs(for: self.view, animated: true);
         view.isUserInteractionEnabled = true
         
     }
@@ -49,16 +50,16 @@ class SplashViewController: UIViewController {
     //MARK: - READ FROM SHARED
     func readFromShared(){
         let preferences = UserDefaults.standard
-        startSpinner()
+       // startSpinner()
         let key = "memberID"
         
         if preferences.object(forKey: key) == nil {
-            print("nothing saved")
-            stopSpinner()
+            print("nothing saved splash")
+          //  stopSpinner()
             performSegue(withIdentifier: "splashtologin", sender: self)
         } else {
             //  let currentLevel = preferences.integer(forKey: currentLevelKey)
-            stopSpinner()
+          //  stopSpinner()
             let nameNew = preferences.object(forKey: key)
             let memberID = nameNew as! String!
             print("Member id is: \(memberID!)")

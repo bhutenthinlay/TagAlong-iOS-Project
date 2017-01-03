@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import GooglePlaces
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
+        GMSPlacesClient.provideAPIKey("AIzaSyCvBa1h-_P2bYvDXKWvQ4pzJrPlQlkrGgM")
         return true
     }
   

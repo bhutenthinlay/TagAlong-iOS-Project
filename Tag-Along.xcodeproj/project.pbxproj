@@ -12,6 +12,8 @@
 		162508841DFE76860043FB48 /* MyDashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162508831DFE76860043FB48 /* MyDashboardViewController.swift */; };
 		162508871DFE7C220043FB48 /* PaymentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162508861DFE7C220043FB48 /* PaymentViewController.swift */; };
 		1628239D1E114DD3001F28EE /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1628239C1E114DD3001F28EE /* SplashViewController.swift */; };
+		1628422E1E1535AF00AF1BB9 /* AutoCompleteNewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1628422D1E1535AF00AF1BB9 /* AutoCompleteNewViewController.swift */; };
+		162B664E1E14F47A00381E29 /* RidesDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162B664D1E14F47A00381E29 /* RidesDetails.swift */; };
 		16337B5F1DF93DAE005DADF1 /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16337B5E1DF93DAE005DADF1 /* ForgotPasswordViewController.swift */; };
 		16337B631DF950EB005DADF1 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16337B621DF950EB005DADF1 /* SignUpViewController.swift */; };
 		16337B661DF95D0F005DADF1 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16337B651DF95D0F005DADF1 /* HomeViewController.swift */; };
@@ -68,7 +70,9 @@
 		16AEB7101E001BEB00E42A32 /* PublishViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16AEB70F1E001BEB00E42A32 /* PublishViewController.swift */; };
 		16AEB7141E0035B400E42A32 /* SSRadioButtonsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16AEB7111E0035B400E42A32 /* SSRadioButtonsController.swift */; };
 		16AEB7151E0035B400E42A32 /* SSRadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16AEB7121E0035B400E42A32 /* SSRadioButton.swift */; };
+		16D564A31E16821F009CD2AC /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D564A21E16821F009CD2AC /* PageViewController.swift */; };
 		16E0D5BE1DFC105C00FC9143 /* MyProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E0D5BD1DFC105C00FC9143 /* MyProfileViewController.swift */; };
+		16EFCC591E1B9FBF002EF2E2 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16EFCC581E1B9FBF002EF2E2 /* KeyboardViewController.swift */; };
 		16F1B8571E07F30000A4B372 /* PaymentNewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F1B8561E07F30000A4B372 /* PaymentNewViewController.swift */; };
 		16F1B8591E07F3C400A4B372 /* NewCardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F1B8581E07F3C400A4B372 /* NewCardTableViewCell.swift */; };
 		16F1B85B1E07F3D000A4B372 /* PaypalTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F1B85A1E07F3D000A4B372 /* PaypalTableViewCell.swift */; };
@@ -99,6 +103,8 @@
 		162508831DFE76860043FB48 /* MyDashboardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyDashboardViewController.swift; sourceTree = "<group>"; };
 		162508861DFE7C220043FB48 /* PaymentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentViewController.swift; sourceTree = "<group>"; };
 		1628239C1E114DD3001F28EE /* SplashViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		1628422D1E1535AF00AF1BB9 /* AutoCompleteNewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoCompleteNewViewController.swift; sourceTree = "<group>"; };
+		162B664D1E14F47A00381E29 /* RidesDetails.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RidesDetails.swift; sourceTree = "<group>"; };
 		16337B5E1DF93DAE005DADF1 /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewController.swift; sourceTree = "<group>"; };
 		16337B621DF950EB005DADF1 /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		16337B651DF95D0F005DADF1 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -168,7 +174,9 @@
 		16AEB70F1E001BEB00E42A32 /* PublishViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PublishViewController.swift; sourceTree = "<group>"; };
 		16AEB7111E0035B400E42A32 /* SSRadioButtonsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSRadioButtonsController.swift; sourceTree = "<group>"; };
 		16AEB7121E0035B400E42A32 /* SSRadioButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSRadioButton.swift; sourceTree = "<group>"; };
+		16D564A21E16821F009CD2AC /* PageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
 		16E0D5BD1DFC105C00FC9143 /* MyProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyProfileViewController.swift; sourceTree = "<group>"; };
+		16EFCC581E1B9FBF002EF2E2 /* KeyboardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
 		16F1B8561E07F30000A4B372 /* PaymentNewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentNewViewController.swift; sourceTree = "<group>"; };
 		16F1B8581E07F3C400A4B372 /* NewCardTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewCardTableViewCell.swift; sourceTree = "<group>"; };
 		16F1B85A1E07F3D000A4B372 /* PaypalTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaypalTableViewCell.swift; sourceTree = "<group>"; };
@@ -257,11 +265,13 @@
 			isa = PBXGroup;
 			children = (
 				16337B651DF95D0F005DADF1 /* HomeViewController.swift */,
-				16432B0E1DF97D9F00FBEA17 /* FindARideViewController.swift */,
 				16432B101DF97DA900FBEA17 /* OfferARideViewController.swift */,
+				16432B0E1DF97D9F00FBEA17 /* FindARideViewController.swift */,
+				16432B1C1DF9A1C800FBEA17 /* MenuListTableViewCell.swift */,
 				16432B121DF98BCE00FBEA17 /* MenuViewController.swift */,
 				16432B1A1DF99DE700FBEA17 /* ProfileTableViewCell.swift */,
-				16432B1C1DF9A1C800FBEA17 /* MenuListTableViewCell.swift */,
+				162B664D1E14F47A00381E29 /* RidesDetails.swift */,
+				16D564A21E16821F009CD2AC /* PageViewController.swift */,
 			);
 			name = Home;
 			sourceTree = "<group>";
@@ -318,6 +328,7 @@
 			isa = PBXGroup;
 			children = (
 				164FA9641E040E53009754C2 /* AutoCompleteViewController.swift */,
+				1628422D1E1535AF00AF1BB9 /* AutoCompleteNewViewController.swift */,
 			);
 			name = AutoComplete;
 			sourceTree = "<group>";
@@ -426,6 +437,7 @@
 			isa = PBXGroup;
 			children = (
 				169EBC461DF9320E006A4099 /* LoginViewController.swift */,
+				16EFCC581E1B9FBF002EF2E2 /* KeyboardViewController.swift */,
 				1628239C1E114DD3001F28EE /* SplashViewController.swift */,
 				1680CD8F1E13B5B0009C65DC /* LoginDetails.swift */,
 			);
@@ -831,6 +843,8 @@
 				16AEB7071DFFC20800E42A32 /* BookRideViewController.swift in Sources */,
 				167E773C1DFED58900971EE4 /* IndividualRidesTableViewCell.swift in Sources */,
 				16F1B8571E07F30000A4B372 /* PaymentNewViewController.swift in Sources */,
+				1628422E1E1535AF00AF1BB9 /* AutoCompleteNewViewController.swift in Sources */,
+				16D564A31E16821F009CD2AC /* PageViewController.swift in Sources */,
 				164D869C1E01835C00D0C35A /* FilterSubmitButtonTableViewCell.swift in Sources */,
 				164FA9651E040E53009754C2 /* AutoCompleteViewController.swift in Sources */,
 				16462C671E0BBA4F0084B753 /* MBProgressHUD.m in Sources */,
@@ -843,6 +857,8 @@
 				164D86951E0173BB00D0C35A /* AsADriverTableViewCell.swift in Sources */,
 				167E773A1DFECD2200971EE4 /* RidesAvailableViewController.swift in Sources */,
 				167E77401DFEE2CA00971EE4 /* RidesDetailViewController.swift in Sources */,
+				16EFCC591E1B9FBF002EF2E2 /* KeyboardViewController.swift in Sources */,
+				162B664E1E14F47A00381E29 /* RidesDetails.swift in Sources */,
 				16AEB7151E0035B400E42A32 /* SSRadioButton.swift in Sources */,
 				16A545901E03C14F00244DCE /* CardTableViewCell.swift in Sources */,
 				16337B631DF950EB005DADF1 /* SignUpViewController.swift in Sources */,
