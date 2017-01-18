@@ -180,7 +180,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate, FBSDKLoginButt
             stopSpinner()
             //self.activity_indicator.stopAnimating()
             //self.activity_indicator.isHidden = true
-            var memberID: String!
+            var memberID: Int!
             var firstName: String!
             var email: String!
             if let action = readableJSON["action"]
@@ -190,10 +190,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate, FBSDKLoginButt
                 if let mem = readableJSON["iMemberId"]
                 {
                      print("member is :\(mem)")
-                  memberID = mem as! String
-                   
-                    let memberIDNew = memberID
-                    writeShared(key: "memberID", value: memberIDNew!)
+//                  memberID = mem as! Int
+//                   
+//                    let memberIDNew = memberID
+                    writeShared(key: "memberID", value: String(describing: "\(mem)"))
                 }
                 if let _ = readableJSON["vEmail"]
                 {
@@ -258,14 +258,16 @@ class LoginViewController: UIViewController, UITextFieldDelegate, FBSDKLoginButt
     //MARK: - GO TO HOME
     func goToHome()
     {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let controller = storyboard.instantiateViewController(withIdentifier: "SWRevealViewController") as! SWRevealViewController
-        let transition = CATransition()
-        transition.duration = 0.5
-        transition.type = kCATransitionPush
-        transition.subtype = kCATransitionFromRight
-        view.window!.layer.add(transition, forKey: kCATransition)
-        self.present(controller, animated: false, completion: nil)
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let controller = storyboard.instantiateViewController(withIdentifier: "SWRevealViewController") as! SWRevealViewController
+//        let transition = CATransition()
+//        transition.duration = 0.5
+//        transition.type = kCATransitionPush
+//        transition.subtype = kCATransitionFromRight
+//        view.window!.layer.add(transition, forKey: kCATransition)
+//        self.present(controller, animated: false, completion: nil)
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.updateViewController(value: true)
 
     }
     func customizeNavigationbar()
@@ -393,7 +395,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate, FBSDKLoginButt
               {
                  if let url = dataNew["url"]
                  {
-                  pictureURL = url as! String
+                    pictureURL = url as! String
                     print(pictureURL)
                     writeShared(key: "imageURL", value: pictureURL)
                 }
@@ -415,7 +417,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate, FBSDKLoginButt
     {
         print("\(email) and id is \(fbid)")
         
-        let params: Parameters = ["type": "login_with_fb", "vEmail": email, "iFBId": fbid]
+        let params: Parameters = ["type": "login_with_fb", "vEmail": email, "iFBId": fbid, "name": firstName + " " + lastName, "vImage": pictureURL]
         Alamofire.request(url, method: .post, parameters: params).responseJSON(completionHandler: {
             response in
             self.parseDataFacebook(JSONData: response.data!)
@@ -429,8 +431,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate, FBSDKLoginButt
             var readableJSON  = try JSONSerialization.jsonObject(with: JSONData, options: .mutableContainers) as! JSONstandard
             print("Response from server 1: \(readableJSON)")
             stopSpinner()
-              var memberID: String!
-            
+            var memberID: String!
             if let action = readableJSON["action"]
             {
                 if action as! Int == 1
@@ -441,8 +442,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate, FBSDKLoginButt
                         print("member is :\(mem)")
                         memberID = mem as! String
                         
-                        let memberIDNew = memberID
-                        writeShared(key: "memberID", value: memberIDNew!)
+                        let memberIDNew = memberID!
+                        writeShared(key: "memberID", value: memberIDNew)
                     }
 
                     goToHome()
@@ -488,12 +489,20 @@ class LoginViewController: UIViewController, UITextFieldDelegate, FBSDKLoginButt
             var readableJSON  = try JSONSerialization.jsonObject(with: JSONData, options: .mutableContainers) as! JSONstandard
             print("Response from server: \(readableJSON)")
             stopSpinner()
-            
+            var memberID: Int!
             if let action = readableJSON["action"]
             {
                 if action as! Int == 1
                 {
-                    
+                    if let mem = readableJSON["iMemberId"]
+                    {
+                        print("member is :\(mem)")
+                        memberID = mem as! Int
+                        
+                        let memberIDNew = memberID!
+                        writeShared(key: "memberID", value: String(describing: memberIDNew))
+                    }
+
                     goToHome()
                     
                 }else if action as! Int == 0

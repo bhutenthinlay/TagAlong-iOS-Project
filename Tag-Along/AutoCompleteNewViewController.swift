@@ -18,12 +18,21 @@ class AutoCompleteNewViewController: UIViewController, GMSAutocompleteResultsVie
     var resultsViewController: GMSAutocompleteResultsViewController?
     var searchController: UISearchController?
     var resultView: UITextView?
-    
+
     @IBAction func bar_btn_back(_ sender: UIBarButtonItem) {
         let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController];
         self.navigationController!.popToViewController(viewControllers[viewControllers.count - 2], animated: true);
 
     }
+    func didRequestAutocompletePredictions(forResultsController resultsController: GMSAutocompleteResultsViewController) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        
+    }
+    func didUpdateAutocompletePredictions(forResultsController resultsController: GMSAutocompleteResultsViewController) {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = false
+        
+    }
+    
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController, didAutocompleteWith place: GMSPlace) {
         searchController?.isActive = false
                 // Do something with the selected place.
@@ -70,6 +79,64 @@ class AutoCompleteNewViewController: UIViewController, GMSAutocompleteResultsVie
 
               
                 }
+                    //for one way from
+                else if self.defaultValues! == 3
+                {
+                    NotificationCenter.default.post(name: Notification.Name("notifyOneWayFromName"), object: place.name)
+                    NotificationCenter.default.post(name: Notification.Name("notifyOneWayFromAddress"), object: place.formattedAddress)
+                    NotificationCenter.default.post(name: Notification.Name("notifyOneWayFromLatitude"), object: place.coordinate.latitude)
+                    NotificationCenter.default.post(name: Notification.Name("notifyOneWayFromLongitude"), object: place.coordinate.longitude)
+                    //  self.protocolLocation.sendAddress(address: place.name)
+                    let when = DispatchTime.now() + 0.4 // change 2 to desired number of seconds
+                    DispatchQueue.main.asyncAfter(deadline: when) {
+                        // Your code with delay
+                        if let navController = self.navigationController {
+                            print("inside")
+                            navController.popViewController(animated: true)
+                            
+                        }
+                        
+                    }
+                }
+                    //for one way to
+                else if self.defaultValues! == 4
+                {
+                    NotificationCenter.default.post(name: Notification.Name("notifyOneWayToName"), object: place.name)
+                    NotificationCenter.default.post(name: Notification.Name("notifyOneWayToAddress"), object: place.formattedAddress)
+                    NotificationCenter.default.post(name: Notification.Name("notifyOneWayToLatitude"), object: place.coordinate.latitude)
+                    NotificationCenter.default.post(name: Notification.Name("notifyOneWayToLongitude"), object: place.coordinate.longitude)
+                    //  self.protocolLocation.sendAddress(address: place.name)
+                    let when = DispatchTime.now() + 0.4 // change 2 to desired number of seconds
+                    DispatchQueue.main.asyncAfter(deadline: when) {
+                        // Your code with delay
+                        if let navController = self.navigationController {
+                            print("inside")
+                            navController.popViewController(animated: true)
+                            
+                        }
+                        
+                    }
+        }
+                else if self.defaultValues! == 5
+                {
+                    NotificationCenter.default.post(name: Notification.Name("notifyOneWayStopOverOneName"), object: place.name)
+                    NotificationCenter.default.post(name: Notification.Name("notifyOneWayStopOverOneAddress"), object: place.formattedAddress)
+                   
+                    //  self.protocolLocation.sendAddress(address: place.name)
+                    let when = DispatchTime.now() + 0.4 // change 2 to desired number of seconds
+                    DispatchQueue.main.asyncAfter(deadline: when) {
+                        // Your code with delay
+                        if let navController = self.navigationController {
+                            print("inside")
+                            navController.popViewController(animated: true)
+                            
+                        }
+                        
+                    }
+        }
+        
+
+
        
 //                self.navigationController?.popViewController(animated: true)
 //                
@@ -77,6 +144,7 @@ class AutoCompleteNewViewController: UIViewController, GMSAutocompleteResultsVie
                 //Dismiss Search
         
     }
+    
     func resultsController(_ resultsController: GMSAutocompleteResultsViewController, didFailAutocompleteWithError error: Error) {
           print("Error: ", error.localizedDescription)
     }
@@ -93,7 +161,11 @@ class AutoCompleteNewViewController: UIViewController, GMSAutocompleteResultsVie
         super.viewDidLoad()
         
         resultsViewController = GMSAutocompleteResultsViewController()
+        let filter = GMSAutocompleteFilter()
+        filter.country = "USA"
+        resultsViewController?.autocompleteFilter = filter
         resultsViewController?.delegate = self
+        
         
         searchController = UISearchController(searchResultsController: resultsViewController)
         searchController?.searchResultsUpdater = resultsViewController
@@ -109,6 +181,7 @@ class AutoCompleteNewViewController: UIViewController, GMSAutocompleteResultsVie
         // Prevent the navigation bar from being hidden when searching.
         searchController?.hidesNavigationBarDuringPresentation = false
     }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
        // searchController?.isActive = true  // doubtful whether this is needed

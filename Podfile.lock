@@ -12,6 +12,7 @@ PODS:
     - SDWebImage/Core (= 3.8.2)
   - SDWebImage/Core (3.8.2)
   - Segmentio (1.0)
+  - SlideMenuControllerSwift (3.0.0)
   - STRatingControl (0.1.1)
   - SwiftyJSON (3.1.3)
 
@@ -25,6 +26,7 @@ DEPENDENCIES:
   - MBProgressHUD (~> 1.0.0)
   - SDWebImage
   - Segmentio
+  - SlideMenuControllerSwift
   - STRatingControl
   - SwiftyJSON (from `https://github.com/SwiftyJSON/SwiftyJSON.git`)
 
@@ -48,9 +50,10 @@ SPEC CHECKSUMS:
   MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
   Segmentio: fd5598b3b13a6aa4e0356c4d12e1ed3e373fde1b
+  SlideMenuControllerSwift: 9c0a84f9a3fba51681debd7be77617094562ebcc
   STRatingControl: 2170e44ad8efac32f68a6ab9562f09ff9180cc76
   SwiftyJSON: b37a26c0a27587f13e8f223e0280e69c3be5d1d4
 
-PODFILE CHECKSUM: 38691b0de7e102235132489b4d77e223dfc29fa5
+PODFILE CHECKSUM: b1e5938f78be42bd39fb5ffd323f8462dfab0220
 
 COCOAPODS: 1.2.0.beta.1

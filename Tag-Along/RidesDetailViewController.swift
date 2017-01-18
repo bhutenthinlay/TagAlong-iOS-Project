@@ -98,6 +98,8 @@ class RidesDetailViewController: UIViewController {
         {
          let dvc = segue.destination as! BookRideViewController
             dvc.imageURL = imageURL
+            dvc.rideDetail = rideDetail
+            dvc.tag = tag
         }
     }
 }

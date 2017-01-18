@@ -9,6 +9,7 @@
 import UIKit
 import Segmentio
 
+
 class HomeViewController: UIViewController, SegueHandler, LocationDetailProtocol{
    
     var defaultNewValue: Int!

@@ -9,7 +9,7 @@
 import UIKit
 
 class RoundTripViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
-
+    var defaultValue: Int!
    //MARK: - OUTLETS
     @IBOutlet weak var txt_field_price: UITextField!
     @IBOutlet weak var txt_field_return_time: UITextField!
@@ -18,6 +18,8 @@ class RoundTripViewController: UIViewController, UITableViewDelegate, UITableVie
     @IBOutlet weak var txt_field_departure_date: UITextField!
     @IBOutlet weak var txt_field_to: UITextField!
     @IBOutlet weak var txt_field_from: UITextField!
+    
+    @IBOutlet weak var lbl_tototal_distance: UILabel!
     
     @IBAction func back(_ sender: UIBarButtonItem) {
         let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController];
@@ -65,6 +67,52 @@ class RoundTripViewController: UIViewController, UITableViewDelegate, UITableVie
         txt_field_return_date.delegate = self
         txt_field_return_time.delegate = self
         txt_field_to.delegate = self
+    }
+    // MARK: - ALERTS METHODS
+    func alert(message: String, title: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let OKAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertController.addAction(OKAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
+    //MARK: - TEXTFIELD DELEGATES METHOD
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+            }
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        if textField == txt_field_from
+        {
+            defaultValue = 6
+            performSegue(withIdentifier: "autocomplete", sender: self)
+            return false
+            
+        }
+        else if textField == txt_field_to{
+            defaultValue = 7
+            performSegue(withIdentifier: "autocomplete", sender: self)
+            return false
+        }
+        else if textField == txt_field_departure_stopover{
+          if txt_field_from.text == "" && txt_field_to.text == ""
+          {
+            alert(message: "No source and destination ", title: "Alert")
+          }
+          else {
+              defaultValue = 8
+              performSegue(withIdentifier: "autocomplete", sender: self)
+            }
+        }
+        else if textField == txt_field_return_stopover{
+            if txt_field_from.text == "" && txt_field_to.text == ""
+            {
+                alert(message: "No source and destination ", title: "Alert")
+            }
+            else {
+                defaultValue = 9
+                performSegue(withIdentifier: "autocomplete", sender: self)
+            }
+        }
+        return true
+
     }
     //MARK: -VIEW LIFECYCLE
     override func viewDidLoad() {
@@ -155,19 +203,5 @@ class RoundTripViewController: UIViewController, UITableViewDelegate, UITableVie
         }
     }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-    //MARK: - DISMISS KEYBOARD
-    func dismissKeyboard() {
-        //Causes the view (or one of its embedded text fields) to resign the first responder status.
-        view.endEditing(true)
-    }
-
+   
 }

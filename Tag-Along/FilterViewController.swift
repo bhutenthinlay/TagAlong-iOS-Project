@@ -253,11 +253,27 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
     
     func rangeSliderValueChanged(_ rangeSlider: RangeSlider)
     {
-       lbl_range_min.text = "\(Int(rangeSlider.lowerValue / 1))h"
+       
         lowerValueRange = Int(rangeSlider.lowerValue)
+        if lowerValueRange <= 12
+        {
+          lbl_range_min.text = "\(Int(rangeSlider.lowerValue / 1))am"
+        }
+        else {
+          lbl_range_min.text = "\(Int((rangeSlider.lowerValue / 1) - 12))pm"
+        }
         stateTimeLower = lowerValueRange
-        lbl_range_max.text = "\(Int(rangeSlider.upperValue / 1))h"
         upperValueRange = Int(rangeSlider.upperValue)
+        if upperValueRange <= 12
+        {
+        lbl_range_max.text = "\(Int(rangeSlider.upperValue / 1))am"
+        }
+        else{
+            lbl_range_max.text = "\(Int((rangeSlider.upperValue / 1) - 12))pm"
+
+        }
+        
+        
         stateTimeHigher = upperValueRange
         
          print("Range slider value changed: (\(rangeSlider.lowerValue / 1) , \(rangeSlider.upperValue / 1))")
@@ -307,7 +323,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
     func callAlamo(url: String, searchDate: String, from: String, to: String)
     {
         view.isUserInteractionEnabled = false
-        //let params: Parameters = ["type": "find_ride", "searchdate": searchDate, "From": from, "To": to]
+        
         let params: Parameters = ["type": "find_ride", "searchdate": searchDate, "From_lat_long": from, "To_lat_long": to, "price": "Medium", "search": "place", "memrating": stateRating, "fromhr": stateTimeLower, "tohr": stateTimeHigher, "ridetype[]": stateRidetype, "carcomfort": stateCarComfort, "fltimg": statePicture, "ePriceType": statePrice]
         
         Alamofire.request(url, method: .post, parameters: params).responseJSON(completionHandler: {
@@ -325,12 +341,7 @@ class FilterViewController: UIViewController, UITableViewDataSource, UITableView
         view.isUserInteractionEnabled = true
         stopSpinner()
         if let mainarray = json["mainarr"].arrayObject{
-            //            if mainarray == "No result found"
-            //            {
-            //
-            //            }
-            
-            //            else {
+          
             if mainarray.count > 0{
                 clearAllData()
                 var name = String()

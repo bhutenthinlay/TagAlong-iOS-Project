@@ -7,16 +7,29 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
+import SlideMenuControllerSwift
+enum LeftMenu: Int {
+    case main = 0
+    
+}
 
-class MenuViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+protocol LeftMenuProtocol : class {
+    func changeViewController(_ menu: LeftMenu)
+}
 
-   
-   
+class MenuViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, LeftMenuProtocol {
+
+    var dashboardURL = "https://tag-along.net/webservice.php"
+    typealias  JSONstandard = [String: AnyObject]
     var name: String!
     @IBOutlet weak var table_view: UITableView!
     var menuList = [String]()
     var menuIcon = [UIImage]()
     var imageURL: String!
+    var memberID: String!
+    var mainViewController: UIViewController!
     override func viewDidLoad() {
         super.viewDidLoad()
         menuList = ["My Profile", "My Car", "My Booking", "My Dashboard", "Find a ride", "Offer a ride", "Setting", "How it works", "Latest rides", "Logout"]
@@ -26,6 +39,14 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
         
                 // Do any additional setup after loading the view.
     }
+    func changeViewController(_ menu: LeftMenu) {
+        switch menu {
+        case .main:
+            self.slideMenuController()?.changeMainViewController(self.mainViewController, close: true)
+        }
+
+    }
+    
     //MARK: - CLEAR SHARED USERDEFAULTS
     func clearShared()
     {
@@ -74,9 +95,19 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
                 name = fname + " " + lname
             }
         }
+        let currentLevelKey = "memberID"
         
+        if preferences.object(forKey: currentLevelKey) == nil {
+            print("nothing saved")
+        } else {
+            //  let currentLevel = preferences.integer(forKey: currentLevelKey)
+            memberID = preferences.object(forKey: currentLevelKey) as! String!
+            print("Member id is: \(memberID!)")
+        }
+
         
     }
+    
 // MARK: - TABLEVIEW DELEGE METHODS
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return menuList.count + 1
@@ -124,6 +155,7 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
             
         else if indexPath.row == 4{
+           // callAlamo(url: dashboardURL, memberID: memberID)
             performSegue(withIdentifier: "dashboard", sender: self)
         }
         else if indexPath.row == 9{
@@ -133,7 +165,10 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
             clearShared()
             let loginManager = FBSDKLoginManager()
             loginManager.logOut()
-           performSegue(withIdentifier: "logout", sender: self)
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.updateViewController(value: false)
+            
+       //    performSegue(withIdentifier: "logout", sender: self)
 //            let viewControllers: [UIViewController] = self.navigationController!.viewControllers ;
 //            for aViewController in viewControllers {
 //                if(aViewController is LoginViewController){
@@ -142,4 +177,5 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
 //            }
         }
     }
+    
 }

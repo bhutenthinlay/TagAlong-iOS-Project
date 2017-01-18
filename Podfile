@@ -4,17 +4,18 @@
 target 'Tag-Along' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
-pod "AwesomeButton"
-pod 'Segmentio'
-pod 'DLRadioButton', '~> 1.4'
-pod 'Cosmos'
-pod 'STRatingControl'
-pod 'SDWebImage'
+ pod "AwesomeButton"
+ pod 'Segmentio'
+ pod 'DLRadioButton', '~> 1.4'
+ pod 'Cosmos'
+ pod 'STRatingControl'
+ pod 'SDWebImage'
  pod "GooglePlacesSearchController"
  pod 'MBProgressHUD', '~> 1.0.0'
  pod 'Alamofire', '~> 4.0'
  pod 'SwiftyJSON', :git => 'https://github.com/SwiftyJSON/SwiftyJSON.git'
  pod 'GooglePlaces'
+ pod 'SlideMenuControllerSwift'
 
     
  

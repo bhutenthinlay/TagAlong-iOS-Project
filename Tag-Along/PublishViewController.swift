@@ -20,15 +20,13 @@ class PublishViewController: UIViewController {
     }
    
     @IBOutlet weak var btn_medium_outlet: UIButton!
-  
     @IBOutlet weak var btn_large_outlet: UIButton!
     @IBOutlet weak var btn_small_outlet: UIButton!
     
 
     @IBAction func bar_btn_back(_ sender: UIBarButtonItem) {
-        let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController];
-        self.navigationController!.popToViewController(viewControllers[viewControllers.count - 2], animated: true);
-
+        let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController]
+        self.navigationController!.popToViewController(viewControllers[viewControllers.count - 2], animated: true)
     }
     
     @IBOutlet weak var txt_field_no_of_seats: UITextField!
@@ -68,22 +66,21 @@ class PublishViewController: UIViewController {
     //MARK : - VIEW LIFE CYCLE
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.title = titleNavigation!
         buttonLuggageType()
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
         // Do any additional setup after loading the view.
     }
+    
     //MARK : - LUGGAGE TYPE
     func buttonLuggageType(){
         btn_large_outlet.addTarget(self, action: #selector(PublishViewController.tappedPublish(_:)), for: .touchUpInside)
         btn_medium_outlet.addTarget(self, action: #selector(PublishViewController.tappedPublish(_:)), for: .touchUpInside)
          btn_small_outlet.addTarget(self, action: #selector(PublishViewController.tappedPublish(_:)), for: .touchUpInside)
         buttonLuggage = [btn_large_outlet, btn_medium_outlet, btn_small_outlet]
-        
-
     }
+    
     //MARK : - TAPPED PUBLISH
     func tappedPublish(_ button: UIButton){
         for (index, buttonClicked) in buttonLuggage.enumerated(){
@@ -91,32 +88,16 @@ class PublishViewController: UIViewController {
                 buttonClicked.isSelected = true
                 print(index)
                 stateLuggage = index
-                
             }
             else{
                 buttonClicked.isSelected = false
-                
-                
             }
-            
         }
-
     }
+    
     //MARK: - DISMISS KEYBOARD
     func dismissKeyboard() {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)
     }
-
-   
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
