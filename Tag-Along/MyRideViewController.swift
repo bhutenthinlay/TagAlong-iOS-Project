@@ -9,6 +9,15 @@
 import UIKit
 import Segmentio
 class MyRideViewController: UIViewController {
+    
+    @IBAction func bar_btn_message(_ sender: UIBarButtonItem) {
+        if let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ChatListViewController") as? ChatListViewController {
+            //            viewController.newsObj = newsObj
+            if let navigator = navigationController {
+                navigator.pushViewController(viewController, animated: true)
+            }
+        }
+    }
     @IBOutlet weak var container_view_as_a_driver: UIView!
     @IBOutlet weak var container_view_as_a_booker: UIView!
     var segmentioStyle = SegmentioStyle.OnlyLabel

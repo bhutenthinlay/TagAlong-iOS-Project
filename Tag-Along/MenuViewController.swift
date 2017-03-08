@@ -32,9 +32,10 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
     var mainViewController: UIViewController!
     override func viewDidLoad() {
         super.viewDidLoad()
-        menuList = ["My Profile", "My Car", "My Booking", "My Dashboard", "Find a ride", "Offer a ride", "Setting", "How it works", "Latest rides", "Logout"]
-        menuIcon = [UIImage(named: "user")!, UIImage(named: "car")!, UIImage(named: "booking")!, UIImage(named: "dash")!, UIImage(named: "search")!, UIImage(named: "offer")!, UIImage(named: "settings")!, UIImage(named: "help")!, UIImage(named: "latest-ride")!, UIImage(named: "latest-ride")!]
-          self.navigationController?.isNavigationBarHidden = true
+         UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
+        menuList = ["My Profile", "My Car", "My Dashboard", "Setting", "How it works", "Latest rides", "Logout"]
+        menuIcon = [UIImage(named: "user")!, UIImage(named: "car")!, UIImage(named: "dash")!, UIImage(named: "settings")!, UIImage(named: "help")!, UIImage(named: "latest-ride")!, UIImage(named: "logout")!]
+        self.navigationController?.isNavigationBarHidden = true
         readFromShared()
         
                 // Do any additional setup after loading the view.
@@ -152,29 +153,32 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
         else if indexPath.row == 1
         {
           performSegue(withIdentifier: "myprofile", sender: self)
+//            self.dismiss(animated: true, completion: nil)
+//            if let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MyProfileViewController") as? MyProfileViewController {
+//                //            viewController.newsObj = newsObj
+//                if let navigator = navigationController {
+//                    navigator.pushViewController(viewController, animated: true)
+//                }
+//            }
         }
-            
-        else if indexPath.row == 4{
+        else if indexPath.row == 2
+        {
+            performSegue(withIdentifier: "car", sender: self)
+        }
+        else if indexPath.row == 3{
            // callAlamo(url: dashboardURL, memberID: memberID)
             performSegue(withIdentifier: "dashboard", sender: self)
         }
-        else if indexPath.row == 9{
+        else if indexPath.row == 6{
            performSegue(withIdentifier: "driver_profile", sender: self)
         }
-        else if indexPath.row == 10{
+        else if indexPath.row == 7{
             clearShared()
             let loginManager = FBSDKLoginManager()
             loginManager.logOut()
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             appDelegate.updateViewController(value: false)
             
-       //    performSegue(withIdentifier: "logout", sender: self)
-//            let viewControllers: [UIViewController] = self.navigationController!.viewControllers ;
-//            for aViewController in viewControllers {
-//                if(aViewController is LoginViewController){
-//                    self.navigationController!.popToViewController(aViewController, animated: true);
-//                }
-//            }
         }
     }
     

@@ -18,14 +18,17 @@ class DriversProfileViewController: UIViewController, UITableViewDataSource, UIT
      var pricePerSeat = [String]()
     
     @IBAction func bar_btn_back(_ sender: UIBarButtonItem) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let controller = storyboard.instantiateViewController(withIdentifier: "SWRevealViewController") as! SWRevealViewController
-        let transition = CATransition()
-        transition.duration = 0.5
-        transition.type = kCATransitionPush
-        transition.subtype = kCATransitionFromLeft
-        view.window!.layer.add(transition, forKey: kCATransition)
-        self.present(controller, animated: false, completion: nil)
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let controller = storyboard.instantiateViewController(withIdentifier: "SWRevealViewController") as! SWRevealViewController
+//        let transition = CATransition()
+//        transition.duration = 0.5
+//        transition.type = kCATransitionPush
+//        transition.subtype = kCATransitionFromLeft
+//        view.window!.layer.add(transition, forKey: kCATransition)
+//        self.present(controller, animated: false, completion: nil)
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.updateViewController(value: true)
+
 
     }
     @IBOutlet weak var table_view: UITableView!

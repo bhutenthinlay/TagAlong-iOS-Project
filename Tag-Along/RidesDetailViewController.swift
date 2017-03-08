@@ -10,6 +10,15 @@ import UIKit
 import AwesomeButton
 import STRatingControl
 class RidesDetailViewController: UIViewController {
+    
+    @IBAction func bar_btn_message(_ sender: UIBarButtonItem) {
+        if let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ChatListViewController") as? ChatListViewController {
+            //            viewController.newsObj = newsObj
+            if let navigator = navigationController {
+                navigator.pushViewController(viewController, animated: true)
+            }
+        }
+    }
     @IBOutlet weak var scroll: UIScrollView!
     @IBOutlet weak var lbl_departure_from: UILabel!
     @IBOutlet weak var btn_amount: AwesomeButton!

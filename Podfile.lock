@@ -3,10 +3,67 @@ PODS:
   - AwesomeButton (0.2.0)
   - Cosmos (6.0.1)
   - DLRadioButton (1.4.9)
+  - Firebase/Auth (3.11.1):
+    - Firebase/Core
+    - FirebaseAuth (= 3.1.0)
+  - Firebase/Core (3.11.1):
+    - FirebaseAnalytics (= 3.6.0)
+    - FirebaseCore (= 3.4.7)
+  - Firebase/Database (3.11.1):
+    - Firebase/Core
+    - FirebaseDatabase (= 3.1.1)
+  - Firebase/Messaging (3.11.1):
+    - Firebase/Core
+    - FirebaseMessaging (= 1.2.1)
+  - Firebase/Storage (3.11.1):
+    - Firebase/Core
+    - FirebaseStorage (= 1.0.5)
+  - FirebaseAnalytics (3.6.0):
+    - FirebaseCore (~> 3.4)
+    - FirebaseInstanceID (~> 1.0)
+    - GoogleInterchangeUtilities (~> 1.2)
+    - GoogleSymbolUtilities (~> 1.1)
+    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
+  - FirebaseAuth (3.1.0):
+    - FirebaseAnalytics (~> 3.6)
+    - GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)
+    - GTMSessionFetcher/Core (~> 1.1)
+  - FirebaseCore (3.4.7):
+    - GoogleInterchangeUtilities (~> 1.2)
+    - GoogleSymbolUtilities (~> 1.1)
+    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
+  - FirebaseDatabase (3.1.1):
+    - FirebaseAnalytics (~> 3.5)
+  - FirebaseInstanceID (1.0.8)
+  - FirebaseMessaging (1.2.1):
+    - FirebaseAnalytics (~> 3.4)
+    - FirebaseInstanceID (~> 1.0)
+    - GoogleInterchangeUtilities (~> 1.2)
+    - GoogleSymbolUtilities (~> 1.1)
+    - GoogleToolboxForMac/Logger (~> 2.1)
+  - FirebaseStorage (1.0.5):
+    - FirebaseAnalytics (~> 3.5)
+    - GTMSessionFetcher/Core (~> 1.1)
+  - GoogleInterchangeUtilities (1.2.2):
+    - GoogleSymbolUtilities (~> 1.1)
   - GoogleMaps/Base (2.0.1)
   - GooglePlaces (2.0.1):
     - GoogleMaps/Base (= 2.0.1)
   - GooglePlacesSearchController (0.1.6)
+  - GoogleSymbolUtilities (1.1.2)
+  - GoogleToolboxForMac/DebugUtils (2.1.1):
+    - GoogleToolboxForMac/Defines (= 2.1.1)
+  - GoogleToolboxForMac/Defines (2.1.1)
+  - GoogleToolboxForMac/Logger (2.1.1):
+    - GoogleToolboxForMac/Defines (= 2.1.1)
+  - GoogleToolboxForMac/NSData+zlib (2.1.1):
+    - GoogleToolboxForMac/Defines (= 2.1.1)
+  - GoogleToolboxForMac/NSDictionary+URLArguments (2.1.1):
+    - GoogleToolboxForMac/DebugUtils (= 2.1.1)
+    - GoogleToolboxForMac/Defines (= 2.1.1)
+    - GoogleToolboxForMac/NSString+URLArguments (= 2.1.1)
+  - GoogleToolboxForMac/NSString+URLArguments (2.1.1)
+  - GTMSessionFetcher/Core (1.1.8)
   - MBProgressHUD (1.0.0)
   - SDWebImage (3.8.2):
     - SDWebImage/Core (= 3.8.2)
@@ -21,6 +78,11 @@ DEPENDENCIES:
   - AwesomeButton
   - Cosmos
   - DLRadioButton (~> 1.4)
+  - Firebase/Auth
+  - Firebase/Core
+  - Firebase/Database
+  - Firebase/Messaging
+  - Firebase/Storage
   - GooglePlaces
   - GooglePlacesSearchController
   - MBProgressHUD (~> 1.0.0)
@@ -44,9 +106,21 @@ SPEC CHECKSUMS:
   AwesomeButton: 59eef1ff4875b4887e68f803c5dc664c27b63fa5
   Cosmos: 374de9804e382a23662908688ab15c8f473977fe
   DLRadioButton: 7bb8a6e3768b572469ace553391ab4d2af6f9c19
+  Firebase: 53b2343db1ebfa3eb16bdb4318b8bb65360b2220
+  FirebaseAnalytics: 9c67af0ebeb8d2146c9b4ea2616439affa947b58
+  FirebaseAuth: b436e4ecebe068bf8e8c6e4e29de5756ffe7ee24
+  FirebaseCore: 46afaf2c2e0419ea7d3acfb08cf26a461a75fe85
+  FirebaseDatabase: 6de92187481ff0e8e124064f21742e95ee883b02
+  FirebaseInstanceID: ba1e640935235e5fac39dfa816fe7660e72e1a8a
+  FirebaseMessaging: acf66347e43c5637c697060c3001d25c809a4131
+  FirebaseStorage: 5738284835edb57f0e81d4ae5832bb17c1e4b5fa
+  GoogleInterchangeUtilities: d5bc4d88d5b661ab72f9d70c58d02ca8c27ad1f7
   GoogleMaps: f09da64fc987c1aa29394567c3cab5a3df83c402
   GooglePlaces: 72fab1d1651c6df0322f2aad245ffb15b80d3c56
   GooglePlacesSearchController: a74fa0545896fee45426b8a9c62939785e6b0634
+  GoogleSymbolUtilities: 631ee17048aa5e9ab133470d768ea997a5ef9b96
+  GoogleToolboxForMac: 8e329f1b599f2512c6b10676d45736bcc2cbbeb0
+  GTMSessionFetcher: 6f8d8b28b7e345549ac471071608170b31cb4977
   MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
   Segmentio: fd5598b3b13a6aa4e0356c4d12e1ed3e373fde1b
@@ -54,6 +128,6 @@ SPEC CHECKSUMS:
   STRatingControl: 2170e44ad8efac32f68a6ab9562f09ff9180cc76
   SwiftyJSON: b37a26c0a27587f13e8f223e0280e69c3be5d1d4
 
-PODFILE CHECKSUM: b1e5938f78be42bd39fb5ffd323f8462dfab0220
+PODFILE CHECKSUM: 68708d30ab66a70066553003929e9daa8d59d85d
 
 COCOAPODS: 1.2.0.beta.1

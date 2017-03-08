@@ -18,6 +18,15 @@ class MyDashboardViewController: UIViewController {
     var totalRides: Int!
     var amountPaid: Int!
     var totalRidesAlert: Int!
+    
+    @IBAction func bar_btn_message(_ sender: UIBarButtonItem) {
+        if let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ChatListViewController") as? ChatListViewController {
+            //            viewController.newsObj = newsObj
+            if let navigator = navigationController {
+                navigator.pushViewController(viewController, animated: true)
+            }
+        }
+    }
     var dashboardURL = "https://tag-along.net/webservice.php"
     typealias  JSONstandard = [String: AnyObject]
     var memberID: String!
@@ -47,14 +56,9 @@ class MyDashboardViewController: UIViewController {
         }
     }
     @IBAction func bar_btn_back(_ sender: UIBarButtonItem) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let controller = storyboard.instantiateViewController(withIdentifier: "SWRevealViewController") as! SWRevealViewController
-        let transition = CATransition()
-        transition.duration = 0.5
-        transition.type = kCATransitionPush
-        transition.subtype = kCATransitionFromLeft
-        view.window!.layer.add(transition, forKey: kCATransition)
-        self.present(controller, animated: false, completion: nil)
+
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.updateViewController(value: true)
     }
     override func viewDidLoad() {
         super.viewDidLoad()

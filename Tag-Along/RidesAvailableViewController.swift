@@ -11,12 +11,21 @@ import STRatingControl
 
 class RidesAvailableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, MyProtocol {
   
+    @IBAction func bar_btn_message(_ sender: UIBarButtonItem) {
+        if let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ChatListViewController") as? ChatListViewController {
+            //            viewController.newsObj = newsObj
+            if let navigator = navigationController {
+                navigator.pushViewController(viewController, animated: true)
+            }
+        }
+    }
     var ridesDetail = RidesDetails()
     // MARK: - outlets
     @IBAction func bar_btn_filter(_ sender: UIBarButtonItem) {
         performSegue(withIdentifier: "filter", sender: self)
         
     }
+    
 
     @IBOutlet weak var table_view: UITableView!
 

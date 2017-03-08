@@ -15,6 +15,15 @@ class BookRideViewController: UIViewController {
     var actualPriceToCarry: Double!
     var actualPrice: Int!
     var actualPricePoints: Int!
+    
+    @IBAction func bar_btn_message(_ sender: UIBarButtonItem) {
+        if let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ChatListViewController") as? ChatListViewController {
+            //            viewController.newsObj = newsObj
+            if let navigator = navigationController {
+                navigator.pushViewController(viewController, animated: true)
+            }
+        }
+    }
     @IBOutlet weak var btn_price: UIButton!
     @IBOutlet weak var lbl_time: UILabel!
     @IBOutlet weak var lbl_date: UILabel!

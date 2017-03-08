@@ -9,7 +9,7 @@
 import UIKit
 import AwesomeButton
 import Alamofire
-
+import Firebase
 
 class LoginViewController: UIViewController, UITextFieldDelegate, FBSDKLoginButtonDelegate {
     var loginURL = "https://tag-along.net/webservice.php"
@@ -27,8 +27,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate, FBSDKLoginButt
     
     @IBOutlet weak var txt_field_email: UITextField!
     
-    @IBOutlet weak var scroll: UIScrollView!
-    @IBOutlet weak var txt_field_password: UITextField!
+        @IBOutlet weak var txt_field_password: UITextField!
 
        var email: String!
     var password: String!
@@ -67,21 +66,32 @@ class LoginViewController: UIViewController, UITextFieldDelegate, FBSDKLoginButt
         
         // Do any additional setup after loading the view.
         self.navigationController?.isNavigationBarHidden = true
-       // scroll.contentSize.height = 670
-       // let width1 = self.view.frame.size.width
-        //scroll.contentSize.width = width1
-//        NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.keyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.keyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
-       
+        
     }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.networkStatusChanged(_:)), name: NSNotification.Name(rawValue: ReachabilityStatusChangedNotification), object: nil)
+        Reach().monitorReachabilityChanges()
+        let status = Reach().connectionStatus()
+        switch status {
+        case .unknown, .offline:
+            print("Not connected")
+            alert(alert: "No Connectivity", message: "Please connect to internet...")
+        case .online(.wwan), .online(.wiFi):
+            print("Connected via WWAN")
+        }
+    }
+    
+    func networkStatusChanged(_ notification: Notification) {
+        let userInfo = (notification as NSNotification).userInfo
+        print(userInfo)
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.isNavigationBarHidden = true
         //readFromShared()
         customizeNavigationbar()
-//        scroll.contentSize.height = 670
-//        let width1 = self.view.frame.size.width
-//        scroll.contentSize.width = width1
     }
     func keyboardWillShow(notification: NSNotification) {
         
@@ -118,11 +128,21 @@ class LoginViewController: UIViewController, UITextFieldDelegate, FBSDKLoginButt
           alert(alert: "Alert", message: "Password should have minimum of 8 characters")
         }
         else {
-            DispatchQueue.main.async {
-                self.callAlamo(url: self.loginURL, email: self.email, password: self.password)
-                self.startSpinner()
-                self.writeShared(key: "state", value: "1")
+            let status = Reach().connectionStatus()
+            switch status {
+            case .unknown, .offline:
+                print("Not connected")
+                alert(alert: "No Connectivity", message: "Please connect to internet...")
+            case .online(.wwan), .online(.wiFi):
+                print("Connected via WWAN")
+                DispatchQueue.main.async {
+                    self.callAlamo(url: self.loginURL, email: self.email, password: self.password)
+                    self.startSpinner()
+                    self.writeShared(key: "state", value: "1")
                 }
+
+            }
+
         }
     }
     //MARK: - STOP SPINNER
@@ -217,21 +237,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate, FBSDKLoginButt
                 
                 }
             }
-            //            if let tracks = readableJSON["tracks"] as? JSONstandard
-            //            {
-            //                if let items = tracks["items"]
-            //                {
-            //                    for i in 0..<items.count{
-            //                        let item = items[i] as! JSONstandard
-            //                        let name = item["name"] as? String
-            //
-            //                        names.append(name!)
-            //
-            //                        self.tableView.reloadData()
-            //                    }
-            //                    
-            //                }
-            //            }
         }
         catch{
             print(error)
@@ -258,14 +263,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate, FBSDKLoginButt
     //MARK: - GO TO HOME
     func goToHome()
     {
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        let controller = storyboard.instantiateViewController(withIdentifier: "SWRevealViewController") as! SWRevealViewController
-//        let transition = CATransition()
-//        transition.duration = 0.5
-//        transition.type = kCATransitionPush
-//        transition.subtype = kCATransitionFromRight
-//        view.window!.layer.add(transition, forKey: kCATransition)
-//        self.present(controller, animated: false, completion: nil)
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.updateViewController(value: true)
 
@@ -335,30 +332,44 @@ class LoginViewController: UIViewController, UITextFieldDelegate, FBSDKLoginButt
     //MARK: - FETCH PROFILE
     func fetchProfile(){
         print("fetching profile")
-        let parameter = ["fields":"email, first_name, last_name, picture.type(large)"]
-        FBSDKGraphRequest(graphPath: "me", parameters: parameter).start { (connection, result, error) -> Void  in
-            if error != nil
-            {
-                print("error is : \(error)")
-                print("user:\(result)")
-                
-            }
-            else{
-                print(result!)
-                print("inside conversion")
-                
-              self.parseDataFromFacebook(data: result as! LoginViewController.JSONstandard)
-                
-                
+        let status = Reach().connectionStatus()
+        switch status {
+        case .unknown, .offline:
+            print("Not connected")
+            alert(alert: "No Connectivity", message: "Please connect to internet...")
+        case .online(.wwan), .online(.wiFi):
+            print("Connected via WWAN")
+            startSpinner()
+            let parameter = ["fields":"email, first_name, last_name, picture.type(large)"]
+            FBSDKGraphRequest(graphPath: "me", parameters: parameter).start { (connection, result, error) -> Void  in
+                if error != nil
+                {
+                    print("error is : \(error)")
+                    print("user:\(result)")
+                    
+                }
+                else{
+                    print(result!)
+                    print("inside conversion")
+                    
+                    self.parseDataFromFacebook(data: result as! LoginViewController.JSONstandard)
+                    
+                    
+                    
+                }
                 
             }
             
+       
         }
+    
+
+        
         
     }
     func parseDataFromFacebook(data: JSONstandard){
         
-      
+      stopSpinner()
                do{
             try
                 print("facebook: \(data)")
@@ -415,6 +426,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate, FBSDKLoginButt
     //MARK: - CALLING WEBSERVICE ALOMO
     func callAlamo(url: String, email: String, fbid: String)
     {
+        
         print("\(email) and id is \(fbid)")
         
         let params: Parameters = ["type": "login_with_fb", "vEmail": email, "iFBId": fbid, "name": firstName + " " + lastName, "vImage": pictureURL]
@@ -479,12 +491,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate, FBSDKLoginButt
         let params: Parameters = ["type": "register", "vFirstName": fname, "vLastName": lname, "vEmail": email, "iFBId": fbid, "vImage": imageURL]
         Alamofire.request(url, method: .post, parameters: params).responseJSON(completionHandler: {
             response in
-            self.parseDataForFacebookRegister(JSONData: response.data!)
+            self.parseDataForFacebookRegister(JSONData: response.data!, email: email, name: lname)
         })
         
         
     }
-    func parseDataForFacebookRegister(JSONData: Data){
+    func parseDataForFacebookRegister(JSONData: Data, email: String, name: String){
         do{
             var readableJSON  = try JSONSerialization.jsonObject(with: JSONData, options: .mutableContainers) as! JSONstandard
             print("Response from server: \(readableJSON)")
@@ -496,11 +508,24 @@ class LoginViewController: UIViewController, UITextFieldDelegate, FBSDKLoginButt
                 {
                     if let mem = readableJSON["iMemberId"]
                     {
-                        print("member is :\(mem)")
-                        memberID = mem as! Int
+                        if let imageURL = readableJSON["vImage"]{
+                            var newImageURL: String?
+                            if let newImageURL1 = imageURL as? String
+                            {
+                                newImageURL = "\(newImageURL1)"
+                                
+                            }
+                            else
+                            {
+                                newImageURL = "http://www.diaglobal.org/_Images/member/Generic_Image_Missing-Profile.jpg"
+                            }
+                            print("the member id is : \(mem as! Int)")
+                            writeShared(key: "memberID", value: "\(mem as! Int)")
+                            let values = ["name": name, "email": email, "profileImageURL": newImageURL!] as [String : Any]
+                            self.registerUserIntoDatabaseWithUid(memberID: "\(mem as! Int)", values: values as [String : AnyObject])
+                        }
+
                         
-                        let memberIDNew = memberID!
-                        writeShared(key: "memberID", value: String(describing: memberIDNew))
                     }
 
                     goToHome()
@@ -513,33 +538,30 @@ class LoginViewController: UIViewController, UITextFieldDelegate, FBSDKLoginButt
                 }
                 
             }
-            //                else if action as! Int == 0{
-            //                    if let message = readableJSON["message"]{
-            //                        alert(alert: "no success", message: message as! String)
-            //                    }
-            //
-            //                }
-            //            }
-            //            if let tracks = readableJSON["tracks"] as? JSONstandard
-            //            {
-            //                if let items = tracks["items"]
-            //                {
-            //                    for i in 0..<items.count{
-            //                        let item = items[i] as! JSONstandard
-            //                        let name = item["name"] as? String
-            //
-            //                        names.append(name!)
-            //
-            //                        self.tableView.reloadData()
-            //                    }
-            //
-            //                }
-            //            }
         }
         catch{
             print(error)
         }
     }
+    func registerUserIntoDatabaseWithUid(memberID: String, values: [String: AnyObject]){
+        let ref = FIRDatabase.database().reference()
+        let userReference = ref.child("users").child(memberID)
+        userReference.updateChildValues(values, withCompletionBlock: {(error, ref)
+            in
+            if error != nil{
+                print("error is \(error!)")
+                return
+            }
+            else{
+                print("Saved user successfully into firebas db")
+                self.navigationController?.popViewController(animated: true)
+                self.dismiss(animated: true, completion: nil)
+            }
+            
+            
+        })
+    }
+    
 
 
 }

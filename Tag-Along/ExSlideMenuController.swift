@@ -11,8 +11,8 @@ import SlideMenuControllerSwift
 class ExSlideMenuController : SlideMenuController {
 
     override func isTagetViewController() -> Bool {
-        
-        if let vc = UIApplication.topViewController() {
+       
+        if let vc = UIApplication.topViewController(){
             if vc is HomeNewViewController{
                 return true
             }

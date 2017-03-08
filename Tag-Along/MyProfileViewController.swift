@@ -26,6 +26,15 @@ class MyProfileViewController: UIViewController {
     typealias  JSONstandard = [String: AnyObject]
     var memberID: String!
     
+    @IBAction func bar_btn_message(_ sender: UIBarButtonItem) {
+        if let viewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ChatListViewController") as? ChatListViewController {
+            //            viewController.newsObj = newsObj
+            if let navigator = navigationController {
+                navigator.pushViewController(viewController, animated: true)
+            }
+        }
+
+    }
     @IBOutlet weak var btn_save: UIButton!
    
     @IBAction func btn_save(_ sender: UIButton) {
@@ -69,14 +78,8 @@ class MyProfileViewController: UIViewController {
     @IBOutlet weak var txt_field_address: UITextView!
     @IBOutlet weak var img_view_profile: UIImageView!
     @IBAction func bar_btn_back(_ sender: UIBarButtonItem) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let controller = storyboard.instantiateViewController(withIdentifier: "SWRevealViewController") as! SWRevealViewController
-        let transition = CATransition()
-        transition.duration = 0.5
-        transition.type = kCATransitionPush
-        transition.subtype = kCATransitionFromLeft
-        view.window!.layer.add(transition, forKey: kCATransition)
-        self.present(controller, animated: false, completion: nil)
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.updateViewController(value: true)
     }
    // MARK: - customoze Textfield
    

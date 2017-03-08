@@ -9,6 +9,7 @@
 import UIKit
 import GooglePlaces
 import SlideMenuControllerSwift
+import Firebase
 import CoreData
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -21,19 +22,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let mainViewController = storyboard.instantiateViewController(withIdentifier: "HomeNewViewController") as! HomeNewViewController
         let leftViewController = storyboard.instantiateViewController(withIdentifier: "MenuViewController") as! MenuViewController
         let firstViewController = storyboard.instantiateViewController(withIdentifier: "SplashViewController") as! SplashViewController
-        
-        
         let nvc: UINavigationController = UINavigationController(rootViewController: mainViewController)
-       
-        
-        
         leftViewController.mainViewController = nvc
-        
-    
-        let slideMenuController = ExSlideMenuController(mainViewController: nvc, leftMenuViewController: leftViewController)
-        
+        let slideMenuController = SlideMenuController(mainViewController: nvc, leftMenuViewController: leftViewController)
         slideMenuController.automaticallyAdjustsScrollViewInsets = true
-        
         slideMenuController.delegate = mainViewController
         self.window?.backgroundColor = UIColor(red: 236.0, green: 238.0, blue: 241.0, alpha: 1.0)
         if value == true
@@ -44,9 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         else {
             self.window?.rootViewController = firstViewController
             self.window?.makeKeyAndVisible()
-            
         }
-        
     }
     func updateViewController(value: Bool){
         UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
@@ -58,6 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         GMSPlacesClient.provideAPIKey("AIzaSyDkmZZo99UkPbJvERT-JHNcOPGs6mjuMac")
+         FIRApp.configure()
         if readFromShared(){
             updateViewController(value: true)
 

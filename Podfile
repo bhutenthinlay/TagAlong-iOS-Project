@@ -16,8 +16,13 @@ target 'Tag-Along' do
  pod 'SwiftyJSON', :git => 'https://github.com/SwiftyJSON/SwiftyJSON.git'
  pod 'GooglePlaces'
  pod 'SlideMenuControllerSwift'
+ pod 'Firebase/Core'
+ pod ‘Firebase/Database’
+ pod ‘Firebase/Auth’
+ pod ‘Firebase/Storage’
+ pod 'Firebase/Messaging'
 
-    
+
  
   # Pods for Tag-Along
   

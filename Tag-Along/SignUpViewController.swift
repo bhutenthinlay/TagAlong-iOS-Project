@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import AwesomeButton
+import Firebase
 class SignUpViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate {
     
     
@@ -31,8 +32,9 @@ class SignUpViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         name = txt_field_name.text!
         password = txt_field_password.text!
         repassword = txt_field_repassword.text!
+        language = btn_prefered_language.currentTitle
         
-        if name == "" || email == "" || password == "" || repassword == ""
+        if name == "" || email == "" || password == "" || repassword == "" || language == "Select Prefered Language"
         {
            alert(alert: "Alert", message: "Field cannot be blank")
         }
@@ -160,15 +162,15 @@ class SignUpViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     func callAlamo(url: String, email: String, password: String, name: String, language: String)
     {
         
-        let params: Parameters = ["type": "register", "vFirstName": name, "vLastName": "", "vEmail": email, "vPassword": password, "vLanguageCode": language]
+        let params: Parameters = ["type": "register", "vFirstName": name, "vLastName": "", "vEmail": email, "vPassword": password, "vLanguageCode": language,  "vImage": "http://www.diaglobal.org/_Images/member/Generic_Image_Missing-Profile.jpg"]
         Alamofire.request(url, method: .post, parameters: params).responseJSON(completionHandler: {
             response in
-            self.parseData(JSONData: response.data!)
+            self.parseData(JSONData: response.data!, email: email, name: name)
         })
         
         
     }
-    func parseData(JSONData: Data){
+    func parseData(JSONData: Data, email: String, name: String){
         do{
             var readableJSON  = try JSONSerialization.jsonObject(with: JSONData, options: .mutableContainers) as! JSONstandard
             print(readableJSON)
@@ -179,9 +181,28 @@ class SignUpViewController: UIViewController, UIPickerViewDelegate, UIPickerView
                 if action as! Int == 1
                 {
                     
-                    navigationController?.popViewController(animated: true)
+                    if let memberID = readableJSON["iMemberId"]
+                    {
+                        if let imageURL = readableJSON["vImage"]{
+                            var newImageURL: String?
+                            if let newImageURL1 = imageURL as? String
+                            {
+                                newImageURL = "\(newImageURL1)"
+                              
+                            }
+                            else
+                            {
+                              newImageURL = "http://www.diaglobal.org/_Images/member/Generic_Image_Missing-Profile.jpg"
+                            }
+                            print("the member id is : \(memberID as! Int)")
+                            writeShared(key: "memberID", value: "\(memberID as! Int)")
+                            let values = ["name": name, "email": email, "profileImageURL": newImageURL!] as [String : Any]
+                            self.registerUserIntoDatabaseWithUid(memberID: "\(memberID)", values: values as [String : AnyObject])
+                        }
+                      
+                     
+                    }
                     
-                    dismiss(animated: true, completion: nil)
                     
                     
                 }else if action as! Int == 0
@@ -192,33 +213,63 @@ class SignUpViewController: UIViewController, UIPickerViewDelegate, UIPickerView
                  }
                 
             }
-//                else if action as! Int == 0{
-//                    if let message = readableJSON["message"]{
-//                        alert(alert: "no success", message: message as! String)
-//                    }
-//                    
-//                }
-//            }
-            //            if let tracks = readableJSON["tracks"] as? JSONstandard
-            //            {
-            //                if let items = tracks["items"]
-            //                {
-            //                    for i in 0..<items.count{
-            //                        let item = items[i] as! JSONstandard
-            //                        let name = item["name"] as? String
-            //
-            //                        names.append(name!)
-            //
-            //                        self.tableView.reloadData()
-            //                    }
-            //
-            //                }
-            //            }
+
         }
         catch{
             print(error)
         }
     }
+    
+    func registerUserIntoDatabaseWithUid(memberID: String, values: [String: AnyObject]){
+        let ref = FIRDatabase.database().reference()
+        let userReference = ref.child("users").child(memberID)
+        userReference.updateChildValues(values, withCompletionBlock: {(error, ref)
+            in
+            if error != nil{
+                print("error is \(error!)")
+                return
+            }
+            else{
+                print("Saved user successfully into firebas db")
+//                self.navigationController?.popViewController(animated: true)
+//                self.dismiss(animated: true, completion: nil)
+               self.goToHome()
+            }
+            
+            
+        })
+    }
+
+    //MARK: - GO TO HOME
+    func goToHome()
+    {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.updateViewController(value: true)
+        
+    }
+    
+    
+    //MARK: -  WRITE ON SHARED PREFERENCE
+    func writeShared(key: String, value: String)
+    {
+        let preferences = UserDefaults.standard
+        
+        let key = key
+        
+        let value = value
+        // preferences.setInteger(value, forKey: key)
+        preferences.set(value, forKey: key)
+        
+        
+        //  Save to disk
+        let didSave = preferences.synchronize()
+        
+        if !didSave {
+            //  Couldn't save (I've never seen this happen in real world testing)
+        }
+        
+    }
+
 
     //McRK: - VALIDATE EMAIL
     func isValidEmail(testStr:String) -> Bool {
